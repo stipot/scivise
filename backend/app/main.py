@@ -12,7 +12,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 86400  # seconds / 24 hours
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 jwt = JWTManager(app)
-CORS(app, origins=['*'])
+CORS(app)
 app.register_blueprint(auth)
 app.config['CORS_HEADERS'] = 'Content-Type'
 

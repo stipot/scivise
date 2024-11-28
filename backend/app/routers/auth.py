@@ -23,7 +23,7 @@ def authorization():
         )
         response = make_response(info)
         return response, 200
-    except (ValueError, AlreadyExistsError) as e:
+    except ValueError as e:
         return str(e), 400
     except NotFoundError as e:
         return str(e), 404
@@ -32,4 +32,16 @@ def authorization():
 
 
 @auth.route('/registration', methods=["POST"])
-def registration(): ...
+def registration():
+    try:
+        user_data: AuthData = request.get_json()
+        auth_service.register_user(
+            Session=Session,
+            username=user_data['username'],
+            password=user_data['password'],
+        )
+        return '', 200
+    except AlreadyExistsError as e:
+        return str(e), 400
+    except KeyError:
+        return 'Обязательные параметры пустые', 400

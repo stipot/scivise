@@ -31,7 +31,7 @@ def authorize_user(Session: sessionmaker[Session], username: str, password: str)
         )
         info = {
             'username': candidate.username,
-            'access_token': access_token,
-            'refresh_token': refresh_token,
+            'access': access_token,
+            'refresh': refresh_token,
         }
         return info
