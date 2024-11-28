@@ -36,5 +36,9 @@
 }
 
 .login_form_wrapper > p > a {
-	color: blue;
+	color: #00a5d3;
+}
+
+.login_form_wrapper > h2 {
+	text-align: center;
 }

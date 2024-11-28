@@ -14,7 +14,7 @@
 }
 
 .sign_up_form_wrapper > p > a {
-	color: blue;
+	color: #00a5d3;
 }
 
 .sign_up_form {
@@ -28,4 +28,8 @@
 
 .sign_up_form > input {
 	padding-left: 4px;
+}
+
+.sign_up_form_wrapper > h2 {
+	text-align: center;
 }

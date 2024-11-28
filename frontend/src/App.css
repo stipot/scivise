@@ -48,3 +48,19 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.column_form > input {
+	padding-left: 4px;
+	border: 1px solid gray;
+}
+
+.column_form > input,
+.column_form > button {
+	border-radius: 10px;
+	font-size: 14px;
+}
+
+.column_form > button {
+	border: none;
+	background-color: #aceafb;
+}
