@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRouter'
 import Login from './pages/Login'
 import General from './pages/General'
 import SignUp from './pages/SignUp'
+import SavedArticles from './pages/SavedArticles'
 
 function App() {
 	const [isAuth, setIsAuth] = useState(false)
@@ -23,6 +24,7 @@ function App() {
 					<Route path="/sign_up" element={<SignUp />} />
 					<Route element={<PrivateRoute isAuth={isAuth} />}>
 						<Route path="/" element={<General />} />
+						<Route path="/saved_articles" element={<SavedArticles />} />
 					</Route>
 				</Routes>
 			</Router>

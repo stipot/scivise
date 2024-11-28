@@ -1,0 +1,43 @@
+.article_card {
+	width: 400px;
+	height: 500px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	border: 1px solid gray;
+	padding: 20px;
+}
+
+.article_card_info {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	line-height: 1.5;
+}
+
+.article_card_info_title {
+	font-size: 22px;
+}
+
+.article_card_info_authors {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.article_card_info_author {
+	border: 1px solid;
+	padding: 1px 3px;
+}
+
+.article_card_buttons {
+	display: flex;
+	justify-content: space-around;
+}
+
+.article_card_buttons > button {
+	font-size: 30px;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
