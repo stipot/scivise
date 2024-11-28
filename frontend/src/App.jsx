@@ -10,12 +10,15 @@ import SavedArticles from './pages/SavedArticles'
 
 function App() {
 	const [isAuth, setIsAuth] = useState(false)
+	const [login, setLogin] = useState('')
 
 	return (
 		<AppContext.Provider
 			value={{
 				isAuth,
 				setIsAuth,
+				login,
+				setLogin,
 			}}
 		>
 			<Router>

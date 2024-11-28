@@ -6,10 +6,11 @@ import { Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 function Login() {
-	const { isAuth, setIsAuth } = useContext(AppContext)
+	const { isAuth, setIsAuth, setLogin } = useContext(AppContext)
 	const { register, handleSubmit, formState } = useForm()
 
 	function login(data) {
+		setLogin(data.login)
 		setIsAuth(true)
 		console.log('login', data)
 	}

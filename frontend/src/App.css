@@ -1,3 +1,7 @@
+:root {
+	--blue: #aceafb;
+}
+
 /* Reset and base styles  */
 * {
 	padding: 0px;
@@ -62,7 +66,7 @@ body {
 
 .column_form > button {
 	border: none;
-	background-color: #aceafb;
+	background-color: var(--blue);
 }
 
 .general_page {
@@ -72,4 +76,41 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+.header {
+	height: 50px;
+	display: flex;
+	align-items: center;
+	padding: 0 20px;
+	background-color: var(--blue);
+	justify-content: space-between;
+}
+
+.header .user_part {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.header .user_part button {
+	padding: 10px;
+	background-color: brown;
+	border: none;
+	color: white;
+}
+
+.search {
+	display: flex;
+	align-items: center;
+}
+
+.search img {
+	max-width: 100%;
+}
+
+.search button {
+	width: 30px;
+	background: none;
+	border: none;
 }
