@@ -4,12 +4,21 @@ import './Login.css'
 import { AppContext } from '../context/AppContext'
 import { Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import API from '../api'
 
 function Login() {
 	const { isAuth, setIsAuth, setLogin } = useContext(AppContext)
 	const { register, handleSubmit, formState } = useForm()
 
-	function login(data) {
+	async function login(data) {
+		try {
+			const res = await API.post('/auth/authorization', { ...data })
+			localStorage.setItem('refresh', res.data.refresh)
+			localStorage.setItem('access', res.data.access)
+		} catch (e) {
+			console.log(e)
+			return
+		}
 		setLogin(data.login)
 		setIsAuth(true)
 		console.log('login', data)
@@ -23,7 +32,7 @@ function Login() {
 					<input
 						type="text"
 						placeholder="Логин"
-						{...register('login', { required: true, minLength: 4 })}
+						{...register('username', { required: true, minLength: 4 })}
 					/>
 					<input
 						type="text"

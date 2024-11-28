@@ -35,7 +35,9 @@ function ArticleCard({ title, authors, annotation, move, style }) {
 				<h3 className="article_card_info_title">{title}</h3>
 				<div className="article_card_info_authors">
 					{authors.map((author) => (
-						<p className="article_card_info_author">{author}</p>
+						<p className="article_card_info_author" key={author}>
+							{author}
+						</p>
 					))}
 				</div>
 				<p className="article_card_info_annonation">
