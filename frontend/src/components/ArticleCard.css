@@ -6,6 +6,25 @@
 	justify-content: space-between;
 	border: 1px solid gray;
 	padding: 20px;
+	background-color: rgb(255, 252, 246);
+	position: absolute;
+}
+
+.article_card_moved_left {
+	transition: all 0.5s ease-out;
+	transform: translateX(-300px);
+	opacity: 0;
+}
+
+.article_card_moved_back {
+	transform: translateX(0) rotate(0);
+	opacity: 0;
+}
+
+.article_card_moved_right {
+	transition: all 0.5s ease-out;
+	transform: translateX(300px);
+	opacity: 0;
 }
 
 .article_card_info {
