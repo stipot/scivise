@@ -1,0 +1,31 @@
+.sign_up_form_wrapper {
+	width: 400px;
+	border: 1px solid;
+	border-radius: 10px;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	position: absolute;
+}
+
+.sign_up_form_wrapper > p {
+	text-align: center;
+}
+
+.sign_up_form_wrapper > p > a {
+	color: blue;
+}
+
+.sign_up_form {
+	gap: 10px;
+}
+
+.sign_up_form > button,
+.sign_up_form > input {
+	height: 30px;
+}
+
+.sign_up_form > input {
+	padding-left: 4px;
+}

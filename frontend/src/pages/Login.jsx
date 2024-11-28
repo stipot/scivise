@@ -14,9 +14,9 @@ function Login() {
 	}
 
 	return (
-		<div className="login_page">
+		<div className="center_content_page">
 			<div className="login_form_wrapper">
-				<form action="" className="login_form">
+				<form action="" className="login_form column_form">
 					<input type="text" placeholder="Логин" />
 					<input type="text" placeholder="Пароль" />
 					<button type="submit" onClick={(e) => login(e)}>

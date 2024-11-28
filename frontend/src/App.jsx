@@ -1,10 +1,11 @@
 import './App.css'
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import { AppContext } from './context/AppContext'
 import PrivateRoute from './components/PrivateRouter'
 import Login from './pages/Login'
 import General from './pages/General'
+import SignUp from './pages/SignUp'
 
 function App() {
 	const [isAuth, setIsAuth] = useState(false)
@@ -19,6 +20,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/login" element={<Login />} />
+					<Route path="/sign_up" element={<SignUp />} />
 					<Route element={<PrivateRoute isAuth={isAuth} />}>
 						<Route path="/" element={<General />} />
 					</Route>
