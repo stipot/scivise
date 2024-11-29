@@ -1,19 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './SignUp.css'
 import { useForm } from 'react-hook-form'
+import API from '../api'
 
 function SignUp() {
 	const { register, handleSubmit, formState } = useForm()
+	const [error, setError] = useState('')
+	const [registered, setRegistered] = useState(false)
 
-	function signUp(data) {
-		console.log('sign up', data)
+	async function signUp(data) {
+		try {
+			await API.post('/auth/registration', { ...data })
+		} catch (e) {
+			console.log(e)
+			setRegistered(false)
+			if (e.response.data) {
+				setError(e.response.data)
+			} else {
+				setError('Неизвестная ошибка')
+			}
+			return
+		}
+		setError('')
+		setRegistered(true)
 	}
 
 	return (
 		<div className="center_content_page">
 			<div className="sign_up_form_wrapper">
 				<h2>Регистрация</h2>
+				{error && <p className="form_error">{error}</p>}
+				{registered && (
+					<p className="form_success">Регистрация прошла успешно</p>
+				)}
 				<form
 					onSubmit={handleSubmit(signUp)}
 					className="sign_up_form column_form"
@@ -21,7 +41,7 @@ function SignUp() {
 					<input
 						type="text"
 						placeholder="Логин"
-						{...register('login', { required: true, minLength: 4 })}
+						{...register('username', { required: true, minLength: 4 })}
 					/>
 					<input
 						type="text"
@@ -32,7 +52,7 @@ function SignUp() {
 						type="submit"
 						disabled={formState.isSubmitting || !formState.isValid}
 					>
-						Войти
+						Зарегистрироваться
 					</button>
 				</form>
 				<p>

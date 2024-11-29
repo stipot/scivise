@@ -114,3 +114,11 @@ body {
 	background: none;
 	border: none;
 }
+
+.form_error {
+	color: red;
+}
+
+.form_success {
+	color: green;
+}

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Login.css'
 import { AppContext } from '../context/AppContext'
@@ -9,6 +9,7 @@ import API from '../api'
 function Login() {
 	const { isAuth, setIsAuth, setLogin } = useContext(AppContext)
 	const { register, handleSubmit, formState } = useForm()
+	const [error, setError] = useState('')
 
 	async function login(data) {
 		try {
@@ -17,17 +18,22 @@ function Login() {
 			localStorage.setItem('access', res.data.access)
 		} catch (e) {
 			console.log(e)
+			if (e.response.data) {
+				setError(e.response.data)
+			} else {
+				setError('Неизвестная ошибка')
+			}
 			return
 		}
-		setLogin(data.login)
+		setLogin(data.username)
 		setIsAuth(true)
-		console.log('login', data)
 	}
 
 	return (
 		<div className="center_content_page">
 			<div className="login_form_wrapper">
 				<h2>Вход</h2>
+				{error && <p className="form_error">{error}</p>}
 				<form onSubmit={handleSubmit(login)} className="login_form column_form">
 					<input
 						type="text"
