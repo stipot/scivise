@@ -1,8 +1,8 @@
 from typing import TypedDict
 from flask import Blueprint, make_response, request
-from errors import AlreadyExistsError, NotFoundError
-from models.base import Session
-from services import auth as auth_service
+from app.errors import AlreadyExistsError, NotFoundError
+from app.models.base import Session
+from app.services import auth as auth_service
 
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 

@@ -2,8 +2,8 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import select
 from passlib.hash import bcrypt
-from errors import AlreadyExistsError, NotFoundError
-from models.models import User
+from app.errors import AlreadyExistsError, NotFoundError
+from app.models.models import User
 
 
 def register_user(Session: sessionmaker[Session], username: str, password: str):
