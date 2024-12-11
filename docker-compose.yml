@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile_inline: | 
+        FROM python:3.10.10
+        WORKDIR /backend
+        COPY ./backend/requirements.txt ./
+        RUN pip install -r requirements.txt
+        RUN pip install gunicorn
+        COPY ./backend/app /backend/app/
+        COPY ./backend/test.db /backend/
+        COPY ./backend/main.py /backend/
+        CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]
+        EXPOSE 5000
+    restart: always
+  frontend:
+    build: 
+      context: .
+      args:
+        REACT_APP_SERVER_ADDRESS: ${REACT_APP_SERVER_ADDRESS}
+      dockerfile_inline: |
+        FROM node:20.14 AS build
+        WORKDIR /frontend
+        COPY ./frontend/package.json ./
+        COPY ./frontend/package-lock.json ./
+        RUN npm install
+        COPY ./frontend/ ./
+        ARG REACT_APP_SERVER_ADDRESS
+        ENV REACT_APP_SERVER_ADDRESS=${REACT_APP_SERVER_ADDRESS}
+        RUN npm run build
+        FROM nginx:latest
+        COPY --from=build /frontend/build /usr/share/nginx/html
+        EXPOSE 80
+    environment:
+      - REACT_APP_SERVER_ADDRESS=http://185.63.191.108:4000/
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/scivise.conf
+    restart: always
+    ports:
+      - '80:80'
+      - '4000:4000'
