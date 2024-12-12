@@ -32,10 +32,9 @@ services:
         FROM nginx:latest
         COPY --from=build /frontend/build /usr/share/nginx/html
         EXPOSE 80
-    environment:
-      - REACT_APP_SERVER_ADDRESS=http://185.63.191.108:4000/
+    env_file: '.env'
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/scivise.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     restart: always
     ports:
       - '80:80'
