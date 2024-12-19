@@ -1,15 +1,106 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import {
+	AppBar,
+	Container,
+	Toolbar,
+	Typography,
+	Menu,
+	MenuItem,
+	IconButton,
+	Box,
+	Button,
+} from '@mui/material'
+import MenuIcon from './MenuIcon'
 
 function Header() {
+	const [anchorElNav, setAnchorElNav] = useState(null)
+	const navLinks = {
+		Лайки: 'likes',
+		Дизлайки: 'dislikes',
+		Избранное: 'favorites',
+	}
+
 	return (
-		<div className="header">
-			<h2>Scivise</h2>
-			{/* <div className="pages">
-				<Link>Рекоммендации</Link>
-				<Link>Библиотека</Link>
-				<Link>Избранное</Link>
-			</div> */}
+		<AppBar position="static">
+			<Container maxWidth="xl">
+				<Toolbar
+					disableGutters
+					sx={{ display: 'flex', justifyContent: 'space-between' }}
+				>
+					<Link to="/" style={{ color: 'white' }}>
+						<Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+							Scivise
+						</Typography>
+					</Link>
+					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={(e) => setAnchorElNav(e.currentTarget)}
+							color="inherit"
+						>
+							<MenuIcon style={{ width: '30px', height: '30px' }} />
+						</IconButton>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorElNav}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'right',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							open={Boolean(anchorElNav)}
+							onClose={() => setAnchorElNav(null)}
+							sx={{ display: { xs: 'block', md: 'none' } }}
+						>
+							{Object.keys(navLinks).map((link) => (
+								<MenuItem key={link} onClick={() => setAnchorElNav(null)}>
+									<Link to={`/user/${navLinks[link]}`}>
+										<Typography sx={{ textAlign: 'center' }}>{link}</Typography>
+									</Link>
+								</MenuItem>
+							))}
+						</Menu>
+					</Box>
+					<Box
+						sx={{
+							display: { xs: 'none', md: 'flex' },
+						}}
+					>
+						{Object.keys(navLinks).map((link) => (
+							<Link to={`/user/${navLinks[link]}`}>
+								<Button
+									key={link}
+									onClick={() => setAnchorElNav(null)}
+									sx={{ my: 2, color: 'white', display: 'block' }}
+								>
+									{link}
+								</Button>
+							</Link>
+						))}
+					</Box>
+				</Toolbar>
+			</Container>
+		</AppBar>
+	)
+}
+
+/* <div className="header">
+			<Link to="/">
+				<h2>Scivise</h2>
+			</Link>
+			<nav className="nav_links">
+				<Link to="/user/likes">Лайки</Link>
+				<Link to="/user/dislikes">Дизлайки</Link>
+				<Link to="/user/favorites">Избранное</Link>
+			</nav>
 			<div className="search">
 				<input type="text" />
 				<button>
@@ -19,8 +110,6 @@ function Header() {
 					/>
 				</button>
 			</div>
-		</div>
-	)
-}
+		</div> */
 
 export default Header
