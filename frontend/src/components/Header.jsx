@@ -61,11 +61,11 @@ function Header() {
 							sx={{ display: { xs: 'block', md: 'none' } }}
 						>
 							{Object.keys(navLinks).map((link) => (
-								<MenuItem key={link} onClick={() => setAnchorElNav(null)}>
-									<Link to={`/user/${navLinks[link]}`}>
+								<Link key={link} to={`/user/${navLinks[link]}`}>
+									<MenuItem onClick={() => setAnchorElNav(null)}>
 										<Typography sx={{ textAlign: 'center' }}>{link}</Typography>
-									</Link>
-								</MenuItem>
+									</MenuItem>
+								</Link>
 							))}
 						</Menu>
 					</Box>
@@ -75,9 +75,8 @@ function Header() {
 						}}
 					>
 						{Object.keys(navLinks).map((link) => (
-							<Link to={`/user/${navLinks[link]}`}>
+							<Link key={link} to={`/user/${navLinks[link]}`}>
 								<Button
-									key={link}
 									onClick={() => setAnchorElNav(null)}
 									sx={{ my: 2, color: 'white', display: 'block' }}
 								>
