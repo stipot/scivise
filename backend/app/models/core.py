@@ -1,16 +1,59 @@
-from app.models.models import Article
+from dataclasses import asdict
+from sqlalchemy import select
+from app.models.models import Article, Author
 from app.models.base import Base, engine, Session
+
 from app.services import articles as article_service
 import pandas as pd
+from datetime import date
 
 
 def create_tables():
     Base.metadata.create_all(engine)
-    df = pd.read_csv('./rss_feeder/naked_science.csv')
-    article = Article()
-    article_service.create_article(
-        Session=Session,
-    )
+    news_df = pd.read_csv('./rss_feeder/naked_science.csv')
+    with Session() as session:
+
+        def create_news(row):
+            author = None
+            if row['author']:
+                stmt = select(Author).where(Author.author_name == row['author'])
+                res = session.execute(stmt).one_or_none()
+                print(res)
+                if not res:
+                    author = Author(author_name=row['author'])
+                    session.add(author)
+                    session.flush()
+                else:
+                    author = res[0]
+
+            article = Article(
+                title=row['title'],
+                type='news',
+                category=row['category'],
+                publication_date=date(2024, 12, 19),
+                content=row['plain_text'],
+                authors=[author],
+                link=row['link'],
+            )
+
+            session.add(article)
+
+        # def create_news(row):
+        #     article = Article(
+        #         title=row['title'],
+        #         type='news',
+        #         category=row['category'],
+        #         publication_date=date(2024, 12, 19),
+        #         content=row['plain_text'],
+        #         authors=[row['author']],
+        #         link=row['link'],
+        #     )
+        #     article_service.create_article(Session, article)
+
+        news_df.apply(create_news, axis=1)
+        session.commit()
+    articles = article_service.get_articles(Session)
+    print(articles[0])
 
 
 def drop_tables():
