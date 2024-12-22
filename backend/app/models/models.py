@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import List
 from sqlalchemy import (
     CheckConstraint,
@@ -7,8 +6,6 @@ from sqlalchemy import (
     String,
     Table,
     UniqueConstraint,
-    Integer,
-    Text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
