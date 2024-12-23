@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams, redirect } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 
 function SavedArticles() {
 	const params = useParams()
@@ -11,15 +11,16 @@ function SavedArticles() {
 	}
 
 	useEffect(() => {
-		if (!Object.keys(titles).includes(params)) {
-			redirect('/404')
+		if (!Object.keys(titles).includes(params.pageName)) {
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		console.log(params.pageName)
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<div className="article_list">
-			<h1>{titles.params}</h1>
+			{!Object.keys(titles).includes(params.pageName) && <Navigate to="/404" />}
+
+			<h1>{titles[params.pageName]}</h1>
 		</div>
 	)
 }

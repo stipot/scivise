@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './ArticleCard.css'
 
-function ArticleCard({ title, authors, annotation, move, style }) {
+function ArticleCard({ article, move, style }) {
 	const [transitionClass, setTransitionClass] = useState('')
 	const [buttonDisabled, setButtonDisabled] = useState(false)
+
 	function like() {
 		setTransitionClass('article_card_moved_right')
 	}
@@ -32,16 +33,30 @@ function ArticleCard({ title, authors, annotation, move, style }) {
 	return (
 		<div className={`article_card ${transitionClass}`} style={style}>
 			<div className="article_card_info">
-				<h3 className="article_card_info_title">{title}</h3>
+				<p style={{ color: '#878787' }} className="article_card_info_magazine">
+					{article.magazine} {article.publication_date}
+				</p>
+				<a href={article.link} target="_blank" rel="noopener noreferrer">
+					<h4 className="article_card_info_title">{article.title}</h4>
+				</a>
+
 				<div className="article_card_info_authors">
-					{authors.map((author) => (
-						<p className="article_card_info_author" key={author}>
-							{author}
+					{article.authors.map((author) => (
+						<p className="article_card_info_author" key={author.id}>
+							{author.author_name}
 						</p>
 					))}
 				</div>
 				<p className="article_card_info_annonation">
-					<strong>Аннотация:</strong> {annotation}
+					{article.type === 'news' ? (
+						<>
+							<strong>Содержание:</strong> {article.content.slice(0, 250)}...
+						</>
+					) : (
+						<>
+							<strong>Аннотация:</strong> {article.annotation}
+						</>
+					)}
 				</p>
 			</div>
 

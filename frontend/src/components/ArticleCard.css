@@ -35,7 +35,7 @@
 }
 
 .article_card_info_title {
-	font-size: 22px;
+	font-size: 21px;
 }
 
 .article_card_info_authors {
@@ -47,6 +47,16 @@
 .article_card_info_author {
 	border: 1px solid;
 	padding: 1px 3px;
+	font-size: 15px;
+}
+
+.article_card_info_magazine {
+	color: #878787;
+	font-size: 14px;
+}
+
+.article_card_info_annonation {
+	font-size: 15px;
 }
 
 .article_card_buttons {

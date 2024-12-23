@@ -1,34 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArticleCard from '../components/ArticleCard'
+import API from './../api'
 
 function General() {
-	const mockArticles = [
-		{
-			title: 'Заголовок 1',
-			authors: ['Автор1 Ф.А.'],
-			annotation: 'addasdasssssssssssadasafafaf',
-		},
-		{
-			title: 'Заголовок 2',
-			authors: ['Автор2 Ф.А.'],
-			annotation: 'addasdasssssssssssa21314124dasafafaf',
-		},
-		{
-			title: 'Заголовок 3',
-			authors: ['Автор2 Ф.А.'],
-			annotation: 'addasdasssssssssssa21314124dasafafaf',
-		},
-		{
-			title: 'Заголовок 4',
-			authors: ['Автор2 Ф.А.'],
-			annotation: 'addasdasssssssssssa21314124dasafafaf',
-		},
-	]
 	const [articles, setArticles] = useState([])
+	const [page, setPage] = useState(1)
 
-	useState(() => {
-		setArticles(mockArticles)
-	}, [])
+	function getArticles(page, startId) {
+		API.get('/articles/', { params: { page: page, start_id: startId } }).then(
+			(res) => {
+				console.log(res)
+
+				setArticles((prev) => [...prev, ...res.data])
+			}
+		)
+	}
+
+	useEffect(() => {
+		getArticles(page)
+		setPage((prev) => prev + 1)
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		console.log(articles.length)
+
+		if (articles.length && articles.length <= 5) {
+			getArticles(page)
+			setPage((prev) => prev + 1)
+		}
+	}, [articles]) // eslint-disable-line react-hooks/exhaustive-deps
 
 	function move() {
 		setArticles((prev) => prev.slice(1, prev.length))
@@ -38,10 +38,14 @@ function General() {
 		<div className="general_page">
 			{articles.length > 0 && (
 				<>
-					<ArticleCard {...articles[0]} move={move} />
+					<ArticleCard article={articles[0]} move={move} />
 
 					{articles.length > 1 && (
-						<ArticleCard {...articles[1]} move={move} style={{ zIndex: -1 }} />
+						<ArticleCard
+							article={articles[1]}
+							move={move}
+							style={{ zIndex: -1 }}
+						/>
 					)}
 				</>
 			)}

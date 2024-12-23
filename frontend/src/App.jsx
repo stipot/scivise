@@ -11,7 +11,7 @@ function App() {
 			<Header />
 			<Routes>
 				<Route path="/" element={<General />} />
-				<Route path="/user/*" element={<SavedArticles />} />
+				<Route path="/user/:pageName" element={<SavedArticles />} />
 				<Route path="/*" element={<NotFound />} />
 				<Route path="/404" element={<NotFound />} />
 			</Routes>
