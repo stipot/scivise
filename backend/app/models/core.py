@@ -4,7 +4,7 @@ from app.models.base import Base, engine, Session
 
 from app.services import articles as article_service
 import pandas as pd
-from datetime import date
+from datetime import datetime
 
 
 def create_tables():
@@ -17,21 +17,25 @@ def create_tables():
             if row['author']:
                 stmt = select(Author).where(Author.author_name == row['author'])
                 res = session.execute(stmt).one_or_none()
-                print(res)
                 if not res:
                     author = Author(author_name=row['author'])
                     session.add(author)
                     session.flush()
                 else:
                     author = res[0]
-
+            pub_date = (
+                datetime.strptime(row['pub_date'], "%a, %d %b %Y %H:%M:%S %z")
+                .date()
+                .strftime('%d.%m.%Y')
+            )
             article = Article(
                 title=row['title'],
                 type='news',
                 category=row['category'],
-                publication_date=date(2024, 12, 19),
+                publication_date=pub_date,
                 content=row['plain_text'],
                 authors=[author],
+                magazine='Naked Science',
                 link=row['link'],
             )
 

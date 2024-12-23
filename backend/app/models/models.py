@@ -1,4 +1,3 @@
-from datetime import date
 from typing import List
 from sqlalchemy import (
     CheckConstraint,
@@ -7,7 +6,6 @@ from sqlalchemy import (
     String,
     Table,
     UniqueConstraint,
-    Date,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
@@ -40,7 +38,8 @@ class Article(Base):
     category: Mapped[str] = mapped_column(String(40), nullable=False)
     annotation: Mapped[str] = mapped_column(String(1000), init=False, nullable=True)
     keywords: Mapped[str] = mapped_column(String(255), init=False, nullable=True)
-    publication_date: Mapped[date] = mapped_column(Date)
+    publication_date: Mapped[str] = mapped_column(String(10))
     content: Mapped[str]
     authors: Mapped[List[Author]] = relationship(secondary=authors_articles)
+    magazine: Mapped[str] = mapped_column(String(255), nullable=False)
     link: Mapped[str] = mapped_column(String(255), nullable=False)
