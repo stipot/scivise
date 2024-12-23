@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from sqlalchemy import select
 from app.models.models import Article, Author
 from app.models.base import Base, engine, Session
