@@ -9,12 +9,16 @@ def get_articles(
     limit: int = 10,
     start_id: int | None = None,
 ):
+    print(start_id)
     offset = limit * (page - 1)
     with Session() as session:
         stmt = select(Article)
         if start_id:
-            stmt.where(Article.id >= start_id).order_by(Article.id)
+            stmt = stmt.where(Article.id >= start_id).order_by(
+                Article.id
+            )  # временное решение (возможно, сделать через курсор)
         stmt = stmt.limit(limit).offset(offset).join(Article.authors)
+        print(stmt)
         articles = (
             session.execute(stmt.options(selectinload(Article.authors))).scalars().all()
         )
