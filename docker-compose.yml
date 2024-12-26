@@ -9,6 +9,7 @@ services:
         RUN pip install -r requirements.txt
         RUN pip install gunicorn
         COPY ./backend/app /backend/app/
+        COPY ./backend/rss_feeder /backend/rss_feeder/
         COPY ./backend/test.db /backend/
         COPY ./backend/main.py /backend/
         CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]
