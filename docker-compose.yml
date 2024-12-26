@@ -12,7 +12,7 @@ services:
         COPY ./backend/rss_feeder /backend/rss_feeder/
         COPY ./backend/test.db /backend/
         COPY ./backend/main.py /backend/
-        CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:app"]
+        CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:get_app()"]
         EXPOSE 5000
     restart: always
   frontend:
