@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import './ArticleCard.css'
+import { addArticle } from '../db'
 
 function ArticleCard({ article, move, style }) {
 	const [transitionClass, setTransitionClass] = useState('')
 	const [buttonDisabled, setButtonDisabled] = useState(false)
 
 	function like() {
-		setTransitionClass('article_card_moved_right')
+		addArticle('likes', article).then(() => {
+			setTransitionClass('article_card_moved_right')
+		})
 	}
 
 	function dislike() {
-		setTransitionClass('article_card_moved_left')
+		addArticle('dislikes', article).then(() => {
+			setTransitionClass('article_card_moved_left')
+		})
 	}
 
 	useEffect(() => {
@@ -24,6 +29,7 @@ function ArticleCard({ article, move, style }) {
 				setTransitionClass('article_card_moved_back')
 				setTransitionClass('')
 				move()
+				localStorage.setItem('last_article_id', article.id)
 				setButtonDisabled(false)
 			}, 500)
 			return () => timeout
@@ -64,7 +70,7 @@ function ArticleCard({ article, move, style }) {
 				<button disabled={buttonDisabled} onClick={() => dislike()}>
 					❌
 				</button>
-				<button disabled={buttonDisabled}>⭐</button>
+				{/* <button disabled={buttonDisabled}>⭐</button> */}
 				<button disabled={buttonDisabled} onClick={() => like()}>
 					❤️
 				</button>

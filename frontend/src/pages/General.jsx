@@ -7,17 +7,22 @@ function General() {
 	const [page, setPage] = useState(1)
 
 	function getArticles(page, startId) {
-		API.get('/articles/', { params: { page: page, start_id: startId } }).then(
-			(res) => {
-				console.log(res)
+		const params = { page: page }
+		if (startId) {
+			params.start_id = startId
+		}
 
-				setArticles((prev) => [...prev, ...res.data])
-			}
-		)
+		API.get('/articles/', { params }).then((res) => {
+			console.log(res)
+
+			setArticles((prev) => [...prev, ...res.data])
+		})
 	}
 
 	useEffect(() => {
-		getArticles(page)
+		const lastArticleId = localStorage.getItem('last_article_id')
+		const startId = lastArticleId ? Number(lastArticleId) + 1 : null
+		getArticles(page, startId)
 		setPage((prev) => prev + 1)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 

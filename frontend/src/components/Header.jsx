@@ -18,7 +18,7 @@ function Header() {
 	const navLinks = {
 		Лайки: 'likes',
 		Дизлайки: 'dislikes',
-		Избранное: 'favorites',
+		// Избранное: 'favorites',
 	}
 
 	return (

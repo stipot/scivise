@@ -1,0 +1,19 @@
+.article_list {
+	margin: 0 auto;
+	max-width: 900px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 10px;
+	margin-top: 40px;
+	list-style: none;
+}
+
+.article_list_item {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	border: 1px solid gray;
+	background-color: rgb(255, 252, 246);
+	padding: 10px;
+}
