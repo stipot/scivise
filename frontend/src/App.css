@@ -33,6 +33,7 @@ a:hover {
 body {
 	position: relative;
 	color: black;
+	background-color: #f5f4f4;
 	height: 100vh;
 	font-family: sans-serif;
 	display: flex;

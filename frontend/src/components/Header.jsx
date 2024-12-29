@@ -11,7 +11,7 @@ import {
 	Box,
 	Button,
 } from '@mui/material'
-import MenuIcon from './MenuIcon'
+import MenuIcon from './icons/MenuIcon'
 
 function Header() {
 	const [anchorElNav, setAnchorElNav] = useState(null)

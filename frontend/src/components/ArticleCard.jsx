@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './ArticleCard.css'
 import { addArticle } from '../db'
+import Card from '@mui/material/Card'
+import { Typography } from '@mui/material'
+import LikeIcon from './icons/LikeIcon'
+import DislikeIcon from './icons/DislikeIcon'
 
 function ArticleCard({ article, move, style }) {
 	const [transitionClass, setTransitionClass] = useState('')
@@ -37,23 +41,26 @@ function ArticleCard({ article, move, style }) {
 	}, [transitionClass]) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
-		<div className={`article_card ${transitionClass}`} style={style}>
+		// <StyledEngineProvider injectFirst>
+		<Card className={`article_card ${transitionClass}`} style={style}>
 			<div className="article_card_info">
-				<p style={{ color: '#878787' }} className="article_card_info_magazine">
-					{article.magazine} {article.publication_date}
-				</p>
+				<Typography className="article_card_info_magazine">
+					{article.category}, {article.magazine}, {article.publication_date}
+				</Typography>
 				<a href={article.link} target="_blank" rel="noopener noreferrer">
-					<h4 className="article_card_info_title">{article.title}</h4>
+					<Typography className="article_card_info_title" variant="h4">
+						{article.title}
+					</Typography>
 				</a>
 
 				<div className="article_card_info_authors">
 					{article.authors.map((author) => (
-						<p className="article_card_info_author" key={author.id}>
+						<Typography className="article_card_info_author" key={author.id}>
 							{author.author_name}
-						</p>
+						</Typography>
 					))}
 				</div>
-				<p className="article_card_info_annonation">
+				<Typography className="article_card_info_annonation">
 					{article.type === 'news' ? (
 						<>
 							<strong>Содержание:</strong> {article.content.slice(0, 250)}...
@@ -63,19 +70,28 @@ function ArticleCard({ article, move, style }) {
 							<strong>Аннотация:</strong> {article.annotation}
 						</>
 					)}
-				</p>
+				</Typography>
 			</div>
 
 			<div className="article_card_buttons">
-				<button disabled={buttonDisabled} onClick={() => dislike()}>
-					❌
+				<button
+					className="dislike_button"
+					disabled={buttonDisabled}
+					onClick={() => dislike()}
+				>
+					<DislikeIcon />
 				</button>
 				{/* <button disabled={buttonDisabled}>⭐</button> */}
-				<button disabled={buttonDisabled} onClick={() => like()}>
-					❤️
+				<button
+					className="like_button"
+					disabled={buttonDisabled}
+					onClick={() => like()}
+				>
+					<LikeIcon />
 				</button>
 			</div>
-		</div>
+		</Card>
+		// {/* </StyledEngineProvider> */}
 	)
 }
 

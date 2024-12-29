@@ -1,23 +1,26 @@
+import { Card, Typography } from '@mui/material'
 import React from 'react'
 
 function ArticleListItem({ article }) {
 	return (
-		<div className="article_list_item">
-			<p style={{ color: '#878787' }} className="article_card_info_magazine">
-				{article.magazine} {article.publication_date}
-			</p>
+		<Card className="article_list_item">
+			<Typography className="article_card_info_magazine">
+				{article.category}, {article.magazine}, {article.publication_date}
+			</Typography>
 			<a href={article.link} target="_blank" rel="noopener noreferrer">
-				<h4 className="article_card_info_title">{article.title}</h4>
+				<Typography className="article_card_info_title">
+					{article.title}
+				</Typography>
 			</a>
 
 			<div className="article_card_info_authors">
 				{article.authors.map((author) => (
-					<p className="article_card_info_author" key={author.id}>
+					<Typography className="article_card_info_author" key={author.id}>
 						{author.author_name}
-					</p>
+					</Typography>
 				))}
 			</div>
-		</div>
+		</Card>
 	)
 }
 

@@ -1,12 +1,14 @@
 .article_card {
-	width: 400px;
+	margin: 20px;
+	max-width: 400px;
+	min-width: 300px;
 	height: 500px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	border: 1px solid gray;
+	/* border: 1px solid gray; */
 	padding: 20px;
-	background-color: rgb(255, 252, 246);
+	/* background-color: rgb(231, 231, 231); */
 	position: absolute;
 }
 
@@ -45,7 +47,8 @@
 }
 
 .article_card_info_author {
-	border: 1px solid;
+	border: 1px solid #b9b9b9;
+	border-radius: 5px;
 	padding: 1px 3px;
 	font-size: 15px;
 }
@@ -57,6 +60,8 @@
 
 .article_card_info_annonation {
 	font-size: 15px;
+	max-height: 200px;
+	overflow: auto;
 }
 
 .article_card_buttons {
@@ -66,7 +71,24 @@
 
 .article_card_buttons > button {
 	font-size: 30px;
-	background: none;
 	border: none;
 	cursor: pointer;
+}
+
+.like_button,
+.dislike_button {
+	width: 90px;
+	height: 50px;
+	border-radius: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.like_button {
+	background-color: #4eafff;
+}
+
+.dislike_button {
+	background-color: #ff543d;
 }
