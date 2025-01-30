@@ -5,6 +5,7 @@ import Card from '@mui/material/Card'
 import { Typography } from '@mui/material'
 import LikeIcon from './icons/LikeIcon'
 import DislikeIcon from './icons/DislikeIcon'
+import { Link } from 'react-router-dom'
 
 function ArticleCard({ article, move, style }) {
 	const [transitionClass, setTransitionClass] = useState('')
@@ -47,11 +48,11 @@ function ArticleCard({ article, move, style }) {
 				<Typography className="article_card_info_magazine">
 					{article.category}, {article.magazine}, {article.publication_date}
 				</Typography>
-				<a href={article.link} target="_blank" rel="noopener noreferrer">
+				<Link to={`/article/${article.id}`} rel="noopener noreferrer">
 					<Typography className="article_card_info_title" variant="h4">
 						{article.title}
 					</Typography>
-				</a>
+				</Link>
 
 				<div className="article_card_info_authors">
 					{article.authors.map((author) => (

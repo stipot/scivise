@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ArticleCard from '../components/ArticleCard'
 import API from './../api'
+import { AppContext } from '../context/AppContext'
 
 function General() {
-	const [articles, setArticles] = useState([])
+	const { articles, setArticles } = useContext(AppContext)
 	const [page, setPage] = useState(1)
 
 	function getArticles(page, startId) {
@@ -12,17 +13,16 @@ function General() {
 			params.start_id = startId
 		}
 
-		API.get('/articles/', { params }).then((res) => {
-			console.log(res)
-
-			setArticles((prev) => [...prev, ...res.data])
-		})
+		return API.get('/articles/', { params })
 	}
 
 	useEffect(() => {
 		const lastArticleId = localStorage.getItem('last_article_id')
 		const startId = lastArticleId ? Number(lastArticleId) + 1 : null
-		getArticles(page, startId)
+		getArticles(page, startId).then((res) => {
+			console.log(res)
+			setArticles((prev) => [...prev, ...res.data])
+		})
 		setPage((prev) => prev + 1)
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 

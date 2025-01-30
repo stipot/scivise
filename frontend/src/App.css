@@ -34,7 +34,7 @@ body {
 	position: relative;
 	color: black;
 	background-color: #f5f4f4;
-	height: 100vh;
+	/* height: 100vh; */
 	font-family: sans-serif;
 	display: flex;
 }
@@ -130,4 +130,31 @@ body {
 .saved_articles h1 {
 	margin-top: 30px;
 	text-align: center;
+}
+
+.like_button,
+.dislike_button {
+	width: 90px;
+	height: 50px;
+	border-radius: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 30px;
+	border: none;
+	cursor: pointer;
+}
+
+.like_button {
+	background-color: #4eafff;
+}
+
+.dislike_button {
+	background-color: #ff543d;
+}
+
+.like_button:disabled,
+.dislike_button:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
 }

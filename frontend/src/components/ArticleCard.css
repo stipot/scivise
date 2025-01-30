@@ -69,26 +69,8 @@
 	justify-content: space-around;
 }
 
-.article_card_buttons > button {
+/* .article_card_buttons > button {
 	font-size: 30px;
 	border: none;
 	cursor: pointer;
-}
-
-.like_button,
-.dislike_button {
-	width: 90px;
-	height: 50px;
-	border-radius: 50px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.like_button {
-	background-color: #4eafff;
-}
-
-.dislike_button {
-	background-color: #ff543d;
-}
+} */
