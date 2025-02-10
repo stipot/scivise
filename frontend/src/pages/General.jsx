@@ -41,19 +41,13 @@ function General() {
 
 	return (
 		<div className="general_page">
-			{articles.length > 0 && (
-				<>
-					<ArticleCard article={articles[0]} move={move} />
-
-					{articles.length > 1 && (
-						<ArticleCard
-							article={articles[1]}
-							move={move}
-							style={{ zIndex: -1 }}
-						/>
-					)}
-				</>
-			)}
+			<div className="article_card_list">
+				{articles.length > 0 && 
+					articles.map(article => (
+						<ArticleCard article={article} move={move} />
+					))
+				}
+			</div>
 		</div>
 	)
 }
