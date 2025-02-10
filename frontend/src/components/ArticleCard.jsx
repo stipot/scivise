@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './ArticleCard.css'
 import { addArticle } from '../db'
 import Card from '@mui/material/Card'
-import { Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import LikeIcon from './icons/LikeIcon'
 import DislikeIcon from './icons/DislikeIcon'
 import { Link } from 'react-router-dom'
@@ -75,21 +75,23 @@ function ArticleCard({ article, move, style }) {
 			</div>
 
 			<div className="article_card_buttons">
-				<button
+				<Button
+					variant="contained"
 					className="dislike_button"
 					disabled={buttonDisabled}
 					onClick={() => dislike()}
 				>
 					<DislikeIcon />
-				</button>
+				</Button>
 				{/* <button disabled={buttonDisabled}>⭐</button> */}
-				<button
+				<Button
+					variant="contained"
 					className="like_button"
 					disabled={buttonDisabled}
 					onClick={() => like()}
 				>
 					<LikeIcon />
-				</button>
+				</Button>
 			</div>
 		</Card>
 		// {/* </StyledEngineProvider> */}

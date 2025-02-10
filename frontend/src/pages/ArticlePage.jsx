@@ -25,8 +25,8 @@ function ArticlePage() {
 					<Link to="/" style={{ position: 'absolute', left: 0 }}>
 						<Button>Назад</Button>
 					</Link>
-					<Box sx={{ display: 'flex', gap: '100px' }}>
-						<button
+					<Box sx={{ display: 'flex', gap: '50px' }}>
+						<Button
 							className="dislike_button"
 							onClick={() => {
 								setIsButtonClicked(true)
@@ -35,8 +35,8 @@ function ArticlePage() {
 							}}
 						>
 							<DislikeIcon />
-						</button>
-						<button
+						</Button>
+						<Button
 							className="like_button"
 							onClick={() => {
 								setIsButtonClicked(true)
@@ -45,7 +45,7 @@ function ArticlePage() {
 							}}
 						>
 							<LikeIcon />
-						</button>
+						</Button>
 					</Box>
 				</Toolbar>
 			</Container>
