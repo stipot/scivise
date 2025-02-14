@@ -3,12 +3,15 @@ import { AppContext } from '../context/AppContext'
 import { Container, Toolbar, Box, Button } from '@mui/material'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LikeIcon from '../components/icons/LikeIcon'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { addArticle } from '../db'
 
 function ArticlePage() {
 	const { articles, setArticles } = useContext(AppContext)
-	const article = articles[0]
+	let params = useParams()
+	const article = articles.filter(article => article.id === parseInt(params.articleId))[0]
+	console.log(params, article);
+	
 	const [isButtonClicked, setIsButtonClicked] = useState(false)
 
 	return (

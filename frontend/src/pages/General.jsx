@@ -17,6 +17,8 @@ function General() {
 	}
 
 	useEffect(() => {
+		if (articles.length) return 
+		
 		const lastArticleId = localStorage.getItem('last_article_id')
 		const startId = lastArticleId ? Number(lastArticleId) + 1 : null
 		getArticles(page, startId).then((res) => {
@@ -30,7 +32,10 @@ function General() {
 		console.log(articles.length)
 
 		if (articles.length && articles.length <= 5) {
-			getArticles(page)
+			getArticles(page).then((res) => {
+				console.log(res)
+				setArticles((prev) => [...prev, ...res.data])
+			})
 			setPage((prev) => prev + 1)
 		}
 	}, [articles]) // eslint-disable-line react-hooks/exhaustive-deps
