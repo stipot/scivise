@@ -40,8 +40,14 @@ function General() {
 		}
 	}, [articles]) // eslint-disable-line react-hooks/exhaustive-deps
 
-	function move() {
-		setArticles((prev) => prev.slice(1, prev.length))
+	function move(articleId) {
+		let articleIdx = 0
+		articles.forEach((article, idx) => {
+			if (article.id === articleId) {
+				articleIdx = idx
+			} 
+		})
+		setArticles((prev) => prev.slice(articleIdx + 1, prev.length))
 	}
 
 	return (

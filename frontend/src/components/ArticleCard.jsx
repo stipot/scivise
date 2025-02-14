@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import './ArticleCard.css'
 import { addArticle } from '../db'
 import Card from '@mui/material/Card'
@@ -6,21 +6,45 @@ import { Button, Typography } from '@mui/material'
 import LikeIcon from './icons/LikeIcon'
 import DislikeIcon from './icons/DislikeIcon'
 import { Link } from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
 
 function ArticleCard({ article, move, style }) {
 	const [transitionClass, setTransitionClass] = useState('')
 	const [buttonDisabled, setButtonDisabled] = useState(false)
+	const { articles, setArticles } = useContext(AppContext)
 
-	function like() {
-		addArticle('likes', article).then(() => {
-			setTransitionClass('article_card_moved_right')
+	function getArticleIdx(articleId) {
+		let articleIdx = 0
+		articles.forEach((article, idx) => {
+			if (article.id === articleId) {
+				articleIdx = idx
+			} 
 		})
+		return articleIdx
 	}
 
-	function dislike() {
-		addArticle('dislikes', article).then(() => {
-			setTransitionClass('article_card_moved_left')
-		})
+	function removeArticles(articleIdx) {
+		setArticles((prev) => prev.slice(articleIdx + 1, prev.length))
+	}
+
+	async function like() {
+		await addArticle('likes', article)
+		let articleIdx = getArticleIdx(article.id)
+		console.log(articles.slice(0, articleIdx), article);
+
+		for (let dislikedArticle of articles.slice(0, articleIdx)) {
+			await addArticle('dislikes', dislikedArticle)
+		}
+		setTransitionClass('article_card_moved_right')
+		
+	}
+
+	async function dislike() {
+		let articleIdx = getArticleIdx(article.id)
+		for (let dislikedArticle of articles.slice(0, articleIdx + 1)) {
+			await addArticle('dislikes', dislikedArticle)
+		}
+		setTransitionClass('article_card_moved_left')
 	}
 
 	useEffect(() => {
@@ -33,7 +57,7 @@ function ArticleCard({ article, move, style }) {
 			const timeout = setTimeout(() => {
 				setTransitionClass('article_card_moved_back')
 				setTransitionClass('')
-				move()
+				removeArticles(getArticleIdx(article.id))
 				localStorage.setItem('last_article_id', article.id)
 				setButtonDisabled(false)
 			}, 500)
@@ -79,7 +103,7 @@ function ArticleCard({ article, move, style }) {
 					variant="contained"
 					className="dislike_button"
 					disabled={buttonDisabled}
-					onClick={() => dislike()}
+					onClick={async () => await dislike()}
 				>
 					<DislikeIcon />
 				</Button>
@@ -88,7 +112,7 @@ function ArticleCard({ article, move, style }) {
 					variant="contained"
 					className="like_button"
 					disabled={buttonDisabled}
-					onClick={() => like()}
+					onClick={async () => await like()}
 				>
 					<LikeIcon />
 				</Button>
