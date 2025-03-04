@@ -18,7 +18,7 @@ function ArticleCard({ article, move, style }) {
 		articles.forEach((article, idx) => {
 			if (article.id === articleId) {
 				articleIdx = idx
-			} 
+			}
 		})
 		return articleIdx
 	}
@@ -28,21 +28,20 @@ function ArticleCard({ article, move, style }) {
 	}
 
 	async function like() {
-		await addArticle('likes', article)
+		await addArticle('Лайки', article)
 		let articleIdx = getArticleIdx(article.id)
-		console.log(articles.slice(0, articleIdx), article);
+		console.log(articles.slice(0, articleIdx), article)
 
 		for (let dislikedArticle of articles.slice(0, articleIdx)) {
-			await addArticle('dislikes', dislikedArticle)
+			await addArticle('Дизлайки', dislikedArticle)
 		}
 		setTransitionClass('article_card_moved_right')
-		
 	}
 
 	async function dislike() {
 		let articleIdx = getArticleIdx(article.id)
 		for (let dislikedArticle of articles.slice(0, articleIdx + 1)) {
-			await addArticle('dislikes', dislikedArticle)
+			await addArticle('Дизлайки', dislikedArticle)
 		}
 		setTransitionClass('article_card_moved_left')
 	}

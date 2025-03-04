@@ -13,20 +13,24 @@ import CollectionsPage from './pages/CollectionsPage'
 
 function App() {
 	const [articles, setArticles] = useState([])
+	const [isDbInitialized, setIsDbInitialized] = useState(false)
 
 	useEffect(() => {
-		initDB()
+		initDB().then(() => setIsDbInitialized(true))
 	}, [])
 
 	return (
-		<AppContext.Provider value={{ articles, setArticles }}>
+		<AppContext.Provider value={{ articles, setArticles, isDbInitialized }}>
 			<StyledEngineProvider injectFirst>
 				<Router>
 					<Header />
 					<Routes>
 						<Route path="/" element={<General />} />
 						<Route path="/user/collections" element={<CollectionsPage />} />
-						<Route path="/user/collections/:pageName" element={<SavedArticles />} />
+						<Route
+							path="/user/collections/:pageName"
+							element={<SavedArticles />}
+						/>
 						<Route path="/article/:articleId" element={<ArticlePage />} />
 						<Route path="/*" element={<NotFound />} />
 						<Route path="/404" element={<NotFound />} />

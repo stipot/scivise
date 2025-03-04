@@ -12,9 +12,9 @@ function DislikeIcon() {
 			<path
 				d="M19 5L4.99998 19M5.00001 5L19 19"
 				stroke="#FFFFFF"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 		</svg>
 	)

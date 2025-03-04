@@ -1,25 +1,27 @@
 .create_collection_form {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 250px;
+	display: inline-flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 250px;
 }
 
 .collections_page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 50px;
+	padding: 10px;
 }
 
 .collections_list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: center;
 }
 
 .collection_card {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
 }

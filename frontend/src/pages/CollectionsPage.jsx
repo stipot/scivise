@@ -1,51 +1,56 @@
-import React, { useEffect, useState } from 'react'
-import {
-	Input,
-    Button,
-} from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
+import { Input, Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import './CollectionsPage.css'
-import { getObjectStoresInfo } from '../db'
+import { getObjectStoresInfo, addObjectStore } from '../db'
 import CollectionCard from '../components/CollectionCard'
+import { AppContext } from '../context/AppContext'
 
 function CollectionsPage() {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        formState
-      } = useForm()
-    const [collections, setCollections] = useState(null)
+	const { register, handleSubmit, reset, formState } = useForm()
+	const [collections, setCollections] = useState(null)
+	const { isDbInitialized } = useContext(AppContext)
 
-    function createCollection(data) {
+	function createCollection(data) {
+		addObjectStore(data.name).then(() =>
+			setCollections((prev) => [...prev, { name: data.name, articlesCount: 0 }])
+		)
+		reset()
+	}
 
-        console.log(data.name);
-        reset()
-    } 
+	useEffect(() => {
+		if (!isDbInitialized) return
 
-    useEffect(() => {
-        getObjectStoresInfo().then((info) => setCollections(info))
-        
-    }, [])
+		getObjectStoresInfo().then((info) => setCollections(info))
+	}, [isDbInitialized])
 
-    return (
-        <div className='collections_page'>
-            <form className='create_collection_form' 
-                onSubmit={handleSubmit(createCollection)}
-            >
-                <Input placeholder='Название подборки' {...register('name')} />
-                <Button variant='contained' type='submit'>Создать</Button>
-            </form>
-            {collections != null &&
-                <div className="collections_list">
-                    {collections.map((collection) => (
-                        <CollectionCard name={collection.name} articlesCount={collection.articlesCount}/>
-                    ))}
-                </div>
-            }
-        </div>
-    )
+	return (
+		<div className="collections_page">
+			<form
+				className="create_collection_form"
+				onSubmit={handleSubmit(createCollection)}
+			>
+				<Input
+					placeholder="Название подборки"
+					{...register('name', { required: true })}
+				/>
+				<Button variant="contained" type="submit" disabled={!formState.isValid}>
+					Создать
+				</Button>
+			</form>
+			{collections != null && (
+				<div className="collections_list">
+					{collections.map((collection) => (
+						<CollectionCard
+							key={collection.name}
+							name={collection.name}
+							articlesCount={collection.articlesCount}
+						/>
+					))}
+				</div>
+			)}
+		</div>
+	)
 }
 
 export default CollectionsPage

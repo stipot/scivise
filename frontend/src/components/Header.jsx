@@ -92,24 +92,4 @@ function Header() {
 	)
 }
 
-/* <div className="header">
-			<Link to="/">
-				<h2>Scivise</h2>
-			</Link>
-			<nav className="nav_links">
-				<Link to="/user/likes">Лайки</Link>
-				<Link to="/user/dislikes">Дизлайки</Link>
-				<Link to="/user/favorites">Избранное</Link>
-			</nav>
-			<div className="search">
-				<input type="text" />
-				<button>
-					<img
-						src="https://img.icons8.com/?size=100&id=59878&format=png&color=000000"
-						alt=""
-					/>
-				</button>
-			</div>
-		</div> */
-
 export default Header

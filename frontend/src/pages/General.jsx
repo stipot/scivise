@@ -17,8 +17,8 @@ function General() {
 	}
 
 	useEffect(() => {
-		if (articles.length) return 
-		
+		if (articles.length) return
+
 		const lastArticleId = localStorage.getItem('last_article_id')
 		const startId = lastArticleId ? Number(lastArticleId) + 1 : null
 		getArticles(page, startId).then((res) => {
@@ -45,7 +45,7 @@ function General() {
 		articles.forEach((article, idx) => {
 			if (article.id === articleId) {
 				articleIdx = idx
-			} 
+			}
 		})
 		setArticles((prev) => prev.slice(articleIdx + 1, prev.length))
 	}
@@ -53,11 +53,10 @@ function General() {
 	return (
 		<div className="general_page">
 			<div className="article_card_list">
-				{articles.length > 0 && 
-					articles.map(article => (
-						<ArticleCard article={article} move={move} />
-					))
-				}
+				{articles.length > 0 &&
+					articles.map((article) => (
+						<ArticleCard article={article} move={move} key={article.id} />
+					))}
 			</div>
 		</div>
 	)
