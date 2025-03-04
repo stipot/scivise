@@ -89,3 +89,29 @@ export function getArticles(storeName, articleIds) {
 		}
 	})
 }
+
+export function addObjectStore() {
+
+}
+
+export function getObjectStoresInfo() {
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open('scivise', version)
+		request.onsuccess = async () => {
+			const db = request.result
+			const info = await Promise.all(Array.from(db.objectStoreNames).map(async (storeName) => {
+				const tx = db.transaction(storeName, 'readonly')
+				const store = tx.objectStore(storeName)
+				const res = store.getAll()
+				const articlesCount = await new Promise(resolve => {
+					res.onsuccess = () => {
+						resolve(res.result.length)
+					}
+				}) 
+				return {name: storeName, articlesCount: articlesCount}
+			}))
+			
+			resolve(info)
+		} 
+	})
+}

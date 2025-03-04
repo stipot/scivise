@@ -15,3 +15,7 @@
 	gap: 5px;
 	padding: 10px;
 }
+
+.delete_article {
+	position: absolute;
+}

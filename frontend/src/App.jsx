@@ -9,6 +9,7 @@ import { initDB } from './db'
 import { StyledEngineProvider } from '@mui/material'
 import ArticlePage from './pages/ArticlePage'
 import { AppContext } from './context/AppContext'
+import CollectionsPage from './pages/CollectionsPage'
 
 function App() {
 	const [articles, setArticles] = useState([])
@@ -24,7 +25,8 @@ function App() {
 					<Header />
 					<Routes>
 						<Route path="/" element={<General />} />
-						<Route path="/user/:pageName" element={<SavedArticles />} />
+						<Route path="/user/collections" element={<CollectionsPage />} />
+						<Route path="/user/collections/:pageName" element={<SavedArticles />} />
 						<Route path="/article/:articleId" element={<ArticlePage />} />
 						<Route path="/*" element={<NotFound />} />
 						<Route path="/404" element={<NotFound />} />

@@ -20,6 +20,7 @@ function ArticleListItem({ article }) {
 					</Typography>
 				))}
 			</div>
+			<div className="delete_article">X</div>
 		</Card>
 	)
 }

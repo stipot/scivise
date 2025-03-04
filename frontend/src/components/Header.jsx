@@ -16,9 +16,10 @@ import MenuIcon from './icons/MenuIcon'
 function Header() {
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const navLinks = {
-		Лайки: 'likes',
-		Дизлайки: 'dislikes',
+		// Лайки: 'likes',
+		// Дизлайки: 'dislikes',
 		// Избранное: 'favorites',
+		Подборки: 'collections',
 	}
 
 	return (
