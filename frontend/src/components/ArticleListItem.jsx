@@ -1,7 +1,7 @@
-import { Card, Typography } from '@mui/material'
+import { Card, IconButton, Typography } from '@mui/material'
 import React from 'react'
 
-function ArticleListItem({ article }) {
+function ArticleListItem({ article, removeFromCollection }) {
 	return (
 		<Card className="article_list_item">
 			<Typography className="article_card_info_magazine">
@@ -20,7 +20,12 @@ function ArticleListItem({ article }) {
 					</Typography>
 				))}
 			</div>
-			<div className="delete_article">X</div>
+			<IconButton
+				className="delete_article"
+				onClick={() => removeFromCollection(article.id)}
+			>
+				╳
+			</IconButton>
 		</Card>
 	)
 }

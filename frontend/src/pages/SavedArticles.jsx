@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
-import ArticleList from '../components/ArticleList'
-import { getArticles } from '../db'
+import { getArticles, removeArticle } from '../db'
 import { Typography } from '@mui/material'
-import { translit } from '../translit'
+import ArticleListItem from '../components/ArticleListItem'
+import './SavedArticles.css'
 
 function SavedArticles() {
 	const [articles, setArticles] = useState([])
@@ -14,6 +14,12 @@ function SavedArticles() {
 	// 	dislikes: 'Отрицательные оценки',
 	// 	// favorites: 'Избранные',
 	// }
+
+	function removeFromCollection(articleId) {
+		removeArticle(params.pageName, articleId).then(() =>
+			setArticles((prev) => prev.filter((article) => article.id !== articleId))
+		)
+	}
 
 	useEffect(() => {
 		getArticles(params.pageName).then((res) => {
@@ -31,7 +37,18 @@ function SavedArticles() {
 				{/* {titles[params.pageName]} */}
 				{params.pageName}
 			</Typography>
-			{articles.length > 0 && <ArticleList articles={articles} />}
+			{articles.length > 0 && (
+				<ul className="article_list">
+					{articles.map((article) => (
+						<li key={article.id}>
+							<ArticleListItem
+								article={article}
+								removeFromCollection={removeFromCollection}
+							/>
+						</li>
+					))}
+				</ul>
+			)}
 		</div>
 	)
 }

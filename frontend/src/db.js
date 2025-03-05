@@ -74,6 +74,25 @@ export function addArticle(storeName, data) {
 	})
 }
 
+export function removeArticle(storeName, articleId) {
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open(
+			'scivise',
+			Number(localStorage.getItem('db_version'))
+		)
+
+		request.onsuccess = () => {
+			const db = request.result
+			const tx = db.transaction(storeName, 'readwrite')
+			tx.objectStore(storeName).delete(articleId)
+			tx.oncomplete = () => {
+				db.close()
+				resolve()
+			}
+		}
+	})
+}
+
 export function getArticles(storeName, articleIds) {
 	return new Promise((resolve) => {
 		const request = indexedDB.open('scivise')
@@ -104,7 +123,7 @@ export function addObjectStore(storeName) {
 		localStorage.setItem('db_version', version + 1)
 		request.onupgradeneeded = async () => {
 			const db = request.result
-			db.createObjectStore(storeName)
+			db.createObjectStore(storeName, { keyPath: 'id' })
 			db.close()
 			resolve()
 		}
