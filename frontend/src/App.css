@@ -167,6 +167,18 @@ body {
 	flex: auto */
 }
 
+.modal_content {
+	min-width: 350px;
+	max-width: 600px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #f1f1f1;
+	padding: 25px;
+	border-radius: 1em;
+}
+
 @media screen and (max-width: 1017px) {
 	.article_card_list {
 		grid-template-columns: 1fr 1fr;
@@ -178,4 +190,3 @@ body {
 		grid-template-columns: 1fr;
 	}
 }
-

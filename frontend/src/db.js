@@ -60,6 +60,7 @@ export function addArticle(storeName, data) {
 			const tx = db.transaction(storeName, 'readwrite')
 			const store = tx.objectStore(storeName)
 			store.add(data)
+			db.close()
 			resolve()
 		}
 
@@ -110,6 +111,7 @@ export function getArticles(storeName, articleIds) {
 			}
 
 			res.onsuccess = () => {
+				db.close()
 				resolve(res.result)
 			}
 		}

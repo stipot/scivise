@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import ArticleCard from '../components/ArticleCard'
 import API from './../api'
 import { AppContext } from '../context/AppContext'
+import { getObjectStoresInfo } from '../db'
 
 function General() {
-	const { articles, setArticles } = useContext(AppContext)
+	const { articles, setArticles, isDbInitialized } = useContext(AppContext)
 	const [page, setPage] = useState(1)
+	const [collections, setCollections] = useState(null)
 
 	function getArticles(page, startId) {
 		const params = { page: page }
@@ -15,6 +17,16 @@ function General() {
 
 		return API.get('/articles/', { params })
 	}
+
+	useEffect(() => {
+		if (!isDbInitialized) return
+
+		getObjectStoresInfo().then((info) =>
+			setCollections(
+				info.filter((collection) => collection.name !== 'Дизлайки')
+			)
+		)
+	}, [isDbInitialized])
 
 	useEffect(() => {
 		if (articles.length) return
@@ -54,8 +66,14 @@ function General() {
 		<div className="general_page">
 			<div className="article_card_list">
 				{articles.length > 0 &&
+					collections &&
 					articles.map((article) => (
-						<ArticleCard article={article} move={move} key={article.id} />
+						<ArticleCard
+							article={article}
+							move={move}
+							key={article.id}
+							collections={collections}
+						/>
 					))}
 			</div>
 		</div>

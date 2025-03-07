@@ -7,11 +7,13 @@ import LikeIcon from './icons/LikeIcon'
 import DislikeIcon from './icons/DislikeIcon'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
+import SelectCollectionModal from './SelectCollectionModal'
 
-function ArticleCard({ article, move, style }) {
+function ArticleCard({ article, move, style, collections }) {
 	const [transitionClass, setTransitionClass] = useState('')
 	const [buttonDisabled, setButtonDisabled] = useState(false)
 	const { articles, setArticles } = useContext(AppContext)
+	const [openModal, setOpenModal] = useState(false)
 
 	function getArticleIdx(articleId) {
 		let articleIdx = 0
@@ -27,8 +29,8 @@ function ArticleCard({ article, move, style }) {
 		setArticles((prev) => prev.slice(articleIdx + 1, prev.length))
 	}
 
-	async function like() {
-		await addArticle('Лайки', article)
+	async function like(collection, article) {
+		await addArticle(collection, article)
 		let articleIdx = getArticleIdx(article.id)
 		console.log(articles.slice(0, articleIdx), article)
 
@@ -111,11 +113,18 @@ function ArticleCard({ article, move, style }) {
 					variant="contained"
 					className="like_button"
 					disabled={buttonDisabled}
-					onClick={async () => await like()}
+					onClick={() => setOpenModal(true)}
 				>
 					<LikeIcon />
 				</Button>
 			</div>
+			<SelectCollectionModal
+				open={openModal}
+				setOpen={setOpenModal}
+				like={like}
+				article={article}
+				collections={collections}
+			/>
 		</Card>
 		// {/* </StyledEngineProvider> */}
 	)
