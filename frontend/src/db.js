@@ -16,7 +16,7 @@ export function initDB() {
 	return new Promise((resolve) => {
 		const request = indexedDB.open(
 			'scivise',
-			Number(localStorage.getItem('db_version'))
+			Number(localStorage.getItem('db_version')) || 1
 		)
 
 		request.onupgradeneeded = () => {
