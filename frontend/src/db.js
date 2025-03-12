@@ -47,6 +47,13 @@ export function initDB() {
 	})
 }
 
+export function deleteDB() {
+	return new Promise((resolve) => {
+		var req = indexedDB.deleteDatabase('scivise')
+		req.onsuccess = () => resolve()
+	})
+}
+
 export function addArticle(storeName, data) {
 	return new Promise((resolve, reject) => {
 		const request = indexedDB.open(

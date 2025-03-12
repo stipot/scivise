@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Input, Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import './CollectionsPage.css'
-import { getObjectStoresInfo, addObjectStore } from '../db'
+import { getObjectStoresInfo, addObjectStore, initDB, deleteDB } from '../db'
 import CollectionCard from '../components/CollectionCard'
 import { AppContext } from '../context/AppContext'
 
@@ -26,6 +26,16 @@ function CollectionsPage() {
 
 	return (
 		<div className="collections_page">
+			<Button
+				onClick={async () => {
+					await deleteDB()
+					await initDB()
+					localStorage.setItem('last_article_id', null)
+					localStorage.setItem('db_version', 1)
+				}}
+			>
+				Переустановить БД
+			</Button>
 			<form
 				className="create_collection_form"
 				onSubmit={handleSubmit(createCollection)}

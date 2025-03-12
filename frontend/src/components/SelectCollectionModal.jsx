@@ -21,8 +21,14 @@ function SelectCollectionModal({ open, setOpen, like, article, collections }) {
 				>
 					{collections.map((collection) => (
 						<Card
-							sx={{ width: '300px', padding: '10px', textAlign: 'center' }}
+							sx={{
+								width: '300px',
+								padding: '10px',
+								textAlign: 'center',
+								cursor: 'pointer',
+							}}
 							onClick={async () => await like(collection.name, article)}
+							key={collection.name}
 						>
 							<Typography variant="h6">{collection.name}</Typography>
 						</Card>
