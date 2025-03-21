@@ -27,7 +27,7 @@ users_articles = Table(
 
 class Users(Base):
     __tablename__ = "users"
-    id: Mapped[str] = mapped_column(primary_key=True, init=False)
+    id: Mapped[str] = mapped_column(primary_key=True, init=True)
 
 
 class Author(Base):

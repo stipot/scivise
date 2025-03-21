@@ -1,10 +1,8 @@
 from sqlalchemy import select
 from app.models.models import Article, Author
 from app.models.base import Base, engine, Session
-
-from app.services import articles as article_service
-import pandas as pd
 from datetime import datetime
+import pandas as pd
 
 
 def create_tables():
@@ -55,8 +53,8 @@ def create_tables():
 
         news_df.apply(create_news, axis=1)
         session.commit()
-    articles = article_service.get_articles(Session)
-    print(articles[0])
+    # articles = article_service.get_articles(Session)
+    # print(articles[0])
 
 
 def drop_tables():

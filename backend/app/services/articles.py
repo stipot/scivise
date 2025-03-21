@@ -1,28 +1,56 @@
-from sqlalchemy import select
+from sqlalchemy import delete, select, insert
 from sqlalchemy.orm import sessionmaker, Session, selectinload
-from app.models.models import Article, Author
+from app.models.models import Article, Author, users_articles
 
 
 def get_articles(
     Session: sessionmaker[Session],
+    user_id: str,
     page: int = 1,
     limit: int = 10,
-    start_id: int | None = None,
+    # start_id: int | None = None,
 ):
-    print(start_id)
     offset = limit * (page - 1)
     with Session() as session:
         stmt = select(Article)
-        if start_id:
-            stmt = stmt.where(Article.id >= start_id).order_by(
-                Article.id
-            )  # временное решение (возможно, сделать через курсор)
-        stmt = stmt.limit(limit).offset(offset).join(Article.authors)
+        stmt = (
+            stmt.limit(limit)
+            .offset(offset)
+            .outerjoin(
+                users_articles,
+                (users_articles.c.article_id == Article.id)
+                & (users_articles.c.user_id == user_id),
+            )
+            .join(Article.authors)
+            .where(users_articles.c.user_id.is_(None))
+        )
         print(stmt)
         articles = (
             session.execute(stmt.options(selectinload(Article.authors))).scalars().all()
         )
         return articles
+
+
+def mark_article(Session: sessionmaker[Session], article_ids: list, user_id: str):
+    with Session() as session:
+        stmt = insert(users_articles).values(
+            [
+                {'user_id': user_id, 'article_id': article_id}
+                for article_id in article_ids
+            ]
+        )
+        session.execute(stmt)
+        session.commit()
+
+
+def delete_mark(Session: sessionmaker[Session], article_ids: list, user_id: str):
+    with Session() as session:
+        stmt = delete(users_articles).where(
+            (users_articles.c.user_id == user_id)
+            & (users_articles.c.article_id.in_(article_ids))
+        )
+        session.execute(stmt)
+        session.commit()
 
 
 def create_article(Session: sessionmaker[Session], article: Article):
