@@ -8,9 +8,17 @@ function General() {
 	const { articles, setArticles, isDbInitialized } = useContext(AppContext)
 	const [page, setPage] = useState(1)
 	const [collections, setCollections] = useState(null)
+	const [stopRequesting, setStopRequesting] = useState(false)
 
-	function getArticles(page) {
-		const params = { page: page, user_id: localStorage.getItem('user_id') }
+	function getArticles(page, articleIds) {
+		const params = {
+			page: page,
+			user_id: localStorage.getItem('user_id'),
+		}
+
+		if (articleIds) {
+			params.article_ids = articleIds
+		}
 
 		return API.get('/articles/', { params })
 	}
@@ -26,21 +34,13 @@ function General() {
 	}, [isDbInitialized])
 
 	useEffect(() => {
-		if (articles.length) return
+		if (articles.length <= 5 && !stopRequesting) {
+			const articleIds = articles.map((article) => article.id)
 
-		getArticles(page).then((res) => {
-			console.log(res)
-			setArticles((prev) => [...prev, ...res.data])
-		})
-		setPage((prev) => prev + 1)
-	}, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-	useEffect(() => {
-		console.log(articles.length)
-
-		if (articles.length && articles.length <= 5) {
-			getArticles(page).then((res) => {
-				console.log(res)
+			getArticles(page, articleIds).then((res) => {
+				if (res.data.length === 0) {
+					setStopRequesting(true)
+				}
 				setArticles((prev) => [...prev, ...res.data])
 			})
 			setPage((prev) => prev + 1)

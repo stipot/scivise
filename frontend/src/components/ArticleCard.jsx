@@ -31,9 +31,9 @@ function ArticleCard({ article, move, style, collections }) {
 	}
 
 	async function like(collection, article) {
+		setButtonDisabled(true)
 		await addArticle(collection, article)
 		let articleIdx = getArticleIdx(article.id)
-		console.log(articles.slice(0, articleIdx), article)
 
 		const articleIds = [article.id]
 		for (let dislikedArticle of articles.slice(0, articleIdx)) {
@@ -137,6 +137,7 @@ function ArticleCard({ article, move, style, collections }) {
 				like={like}
 				article={article}
 				collections={collections}
+				disabled={buttonDisabled}
 			/>
 		</Card>
 		// {/* </StyledEngineProvider> */}

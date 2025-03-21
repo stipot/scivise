@@ -1,7 +1,14 @@
 import React from 'react'
-import { Modal, Box, Typography, Card } from '@mui/material'
+import { Modal, Box, Typography, Button } from '@mui/material'
 
-function SelectCollectionModal({ open, setOpen, like, article, collections }) {
+function SelectCollectionModal({
+	open,
+	setOpen,
+	like,
+	article,
+	collections,
+	disabled,
+}) {
 	const handleClose = () => setOpen(false)
 
 	return (
@@ -20,18 +27,18 @@ function SelectCollectionModal({ open, setOpen, like, article, collections }) {
 					}}
 				>
 					{collections.map((collection) => (
-						<Card
+						<Button
 							sx={{
 								width: '300px',
 								padding: '10px',
-								textAlign: 'center',
-								cursor: 'pointer',
 							}}
+							variant="outlined"
 							onClick={async () => await like(collection.name, article)}
 							key={collection.name}
+							disabled={disabled}
 						>
 							<Typography variant="h6">{collection.name}</Typography>
-						</Card>
+						</Button>
 					))}
 				</div>
 			</Box>

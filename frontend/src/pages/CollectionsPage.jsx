@@ -2,10 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Input, Button, Modal, Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import './CollectionsPage.css'
-import { getObjectStoresInfo, addObjectStore, initDB, deleteDB } from '../db'
+import {
+	getObjectStoresInfo,
+	addObjectStore,
+	initDB,
+	deleteDB,
+	getArticles,
+} from '../db'
 import CollectionCard from '../components/CollectionCard'
 import { AppContext } from '../context/AppContext'
 import { deleteCollection } from '../db'
+import API from '../api'
 
 function CollectionsPage() {
 	const { register, handleSubmit, reset, formState } = useForm()
@@ -65,20 +72,46 @@ function CollectionsPage() {
 				</div>
 			)}
 
-				<Modal open={Boolean(collectionForDelete)} onClose={handleClose}>
-					<Box className="modal_content" sx={{display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center'}}>
-						<Typography variant='h4'>Все оценки пропадут</Typography>
-						<Button color='error' variant='outlined' onClick={async () => {
+			<Modal open={Boolean(collectionForDelete)} onClose={handleClose}>
+				<Box
+					className="modal_content"
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '40px',
+						alignItems: 'center',
+					}}
+				>
+					<Typography variant="h4">Все оценки пропадут</Typography>
+					<Button
+						color="error"
+						variant="outlined"
+						onClick={async () => {
+							await API.delete('/articles/mark', {
+								data: {
+									user_id: localStorage.getItem('user_id'),
+									article_ids: (
+										await getArticles(collectionForDelete)
+									).map((article) => article.id),
+								},
+							})
 							await deleteCollection(collectionForDelete)
-							setCollections(prev => prev.filter(collection => collection.name !== collectionForDelete))
-							console.log(collections);
-							
+
+							setCollections((prev) =>
+								prev.filter(
+									(collection) => collection.name !== collectionForDelete
+								)
+							)
+							console.log(collections)
+
 							setCollectionForDelete('')
-						}}>Удалить</Button>
-					</Box>
-				</Modal>
+						}}
+					>
+						Удалить
+					</Button>
+				</Box>
+			</Modal>
 		</div>
-		
 	)
 }
 

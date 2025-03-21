@@ -50,7 +50,7 @@ export function initDB() {
 export function deleteDB() {
 	return new Promise((resolve) => {
 		var req = indexedDB.deleteDatabase('scivise')
-		req.onsuccess = () => resolve()
+		req.onsuccess = resolve
 	})
 }
 
@@ -62,7 +62,7 @@ export function addArticle(storeName, data) {
 		)
 
 		request.onsuccess = () => {
-			console.log('request.onsuccess - addArticle', data)
+			console.log('addArticle', data)
 			const db = request.result
 			const tx = db.transaction(storeName, 'readwrite')
 			const store = tx.objectStore(storeName)
