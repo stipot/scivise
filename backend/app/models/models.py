@@ -17,6 +17,18 @@ authors_articles = Table(
     Column('article_id', ForeignKey('articles.id')),
 )
 
+users_articles = Table(
+    'users_articles',
+    Base.metadata,
+    Column('user_id', ForeignKey('users.id')),
+    Column('article_id', ForeignKey('articles.id')),
+)
+
+
+class Users(Base):
+    __tablename__ = "users"
+    id: Mapped[str] = mapped_column(primary_key=True, init=False)
+
 
 class Author(Base):
     __tablename__ = "authors"
