@@ -166,17 +166,3 @@ export function getObjectStoresInfo() {
 		}
 	})
 }
-
-export function deleteCollection(collectionName) {
-	return new Promise((resolve, reject) => {
-		const version = Number(localStorage.getItem('db_version'))
-		const request = indexedDB.open('scivise', version + 1)
-		request.onupgradeneeded = async () => {
-			const db = request.result
-			db.deleteObjectStore(collectionName)
-			localStorage.setItem('db_version', version + 1)
-			db.close()
-			resolve()
-		}
-	})
-}

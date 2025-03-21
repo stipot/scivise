@@ -10,13 +10,19 @@ import { StyledEngineProvider } from '@mui/material'
 import ArticlePage from './pages/ArticlePage'
 import { AppContext } from './context/AppContext'
 import CollectionsPage from './pages/CollectionsPage'
+import API from './api'
 
 function App() {
 	const [articles, setArticles] = useState([])
 	const [isDbInitialized, setIsDbInitialized] = useState(false)
 
 	useEffect(() => {
-		initDB().then(() => setIsDbInitialized(true))
+		if (!localStorage.getItem('user_id')) {
+			API.post('/add_user').then((res) => {
+				localStorage.setItem('user_id', res.data)
+				initDB().then(() => setIsDbInitialized(true))
+			})
+		} else initDB().then(() => setIsDbInitialized(true))
 	}, [])
 
 	return (

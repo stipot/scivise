@@ -16,3 +16,16 @@
 	padding: 10px 40px 10px 10px;
 	position: relative;
 }
+
+.delete_article {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right: 10px;
+	top: 37%;
+	color: red;
+	font-weight: 900;
+	cursor: pointer;
+	font-size: 15px;
+	padding: 0;
+}

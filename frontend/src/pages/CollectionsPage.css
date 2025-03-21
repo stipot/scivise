@@ -23,6 +23,5 @@
 .collection_card {
 	display: flex;
 	flex-direction: column;
-	padding: 10px 40px 10px 10px;
-	position: relative;
+	padding: 10px;
 }

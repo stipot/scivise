@@ -21,7 +21,7 @@ function ArticleListItem({ article, removeFromCollection }) {
 				))}
 			</div>
 			<IconButton
-				className="cross_button"
+				className="delete_article"
 				onClick={() => removeFromCollection(article.id)}
 			>
 				╳
