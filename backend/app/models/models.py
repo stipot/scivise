@@ -22,6 +22,7 @@ users_articles = Table(
     Base.metadata,
     Column('user_id', ForeignKey('users.id')),
     Column('article_id', ForeignKey('articles.id')),
+    UniqueConstraint('user_id', 'article_id'),
 )
 
 

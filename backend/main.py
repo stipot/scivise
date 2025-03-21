@@ -12,8 +12,8 @@ def get_app():
     CORS(app)
     app.config['CORS_HEADERS'] = 'Content-Type'
     app.register_blueprint(articles.articles_router)
-    # drop_tables()
-    # create_tables()
+    drop_tables()
+    create_tables()
     return app
 
 

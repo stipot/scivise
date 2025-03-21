@@ -8,10 +8,11 @@ articles_router = Blueprint('articles', __name__, url_prefix='/articles')
 
 @articles_router.get('/')
 def get_article():
+    article_ids = request.args.getlist('article_ids[]', type=int)
     page = request.args.get('page', 1, type=int)
     user_id = request.args.get('user_id', type=str)
     articles = article_service.get_articles(
-        Session, page=page, limit=12, user_id=user_id
+        Session, page=page, limit=12, user_id=user_id, shown_article_ids=article_ids
     )
     articles = [asdict(article) for article in articles]
     return articles, 200
@@ -22,7 +23,6 @@ def mark_article():
     data = request.get_json()
     article_ids = data.get('article_ids')
     user_id = data.get('user_id')
-    print(article_ids)
     article_service.mark_article(Session, article_ids=article_ids, user_id=user_id)
     return '', 200
 
@@ -32,6 +32,5 @@ def delete_mark():
     data = request.get_json()
     article_ids = data.get('article_ids')
     user_id = data.get('user_id')
-    print(article_ids)
     article_service.delete_mark(Session, article_ids=article_ids, user_id=user_id)
     return '', 200

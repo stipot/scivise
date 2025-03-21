@@ -8,14 +8,14 @@ def get_articles(
     user_id: str,
     page: int = 1,
     limit: int = 10,
-    # start_id: int | None = None,
+    shown_article_ids: list = None,
 ):
-    offset = limit * (page - 1)
+    # offset = limit * (page - 1)
     with Session() as session:
         stmt = select(Article)
         stmt = (
             stmt.limit(limit)
-            .offset(offset)
+            # .offset(offset)
             .outerjoin(
                 users_articles,
                 (users_articles.c.article_id == Article.id)
@@ -24,6 +24,8 @@ def get_articles(
             .join(Article.authors)
             .where(users_articles.c.user_id.is_(None))
         )
+        if shown_article_ids:
+            stmt = stmt.where(Article.id.not_in(shown_article_ids))
         print(stmt)
         articles = (
             session.execute(stmt.options(selectinload(Article.authors))).scalars().all()
