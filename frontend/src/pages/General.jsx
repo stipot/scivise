@@ -9,11 +9,8 @@ function General() {
 	const [page, setPage] = useState(1)
 	const [collections, setCollections] = useState(null)
 
-	function getArticles(page, startId) {
-		const params = { page: page }
-		if (startId) {
-			params.start_id = startId
-		}
+	function getArticles(page) {
+		const params = { page: page, user_id: localStorage.getItem('user_id') }
 
 		return API.get('/articles/', { params })
 	}
@@ -31,9 +28,7 @@ function General() {
 	useEffect(() => {
 		if (articles.length) return
 
-		const lastArticleId = localStorage.getItem('last_article_id')
-		const startId = lastArticleId ? Number(lastArticleId) + 1 : null
-		getArticles(page, startId).then((res) => {
+		getArticles(page).then((res) => {
 			console.log(res)
 			setArticles((prev) => [...prev, ...res.data])
 		})

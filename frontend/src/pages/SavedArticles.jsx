@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getArticles, removeArticle } from '../db'
 import { Typography } from '@mui/material'
 import ArticleListItem from '../components/ArticleListItem'
 import './SavedArticles.css'
+import API from '../api'
 
 function SavedArticles() {
 	const [articles, setArticles] = useState([])
 	const params = useParams()
 
-	// const titles = {
-	// 	likes: 'Положительные оценки',
-	// 	dislikes: 'Отрицательные оценки',
-	// 	// favorites: 'Избранные',
-	// }
+	async function removeFromCollection(articleId) {
+		await removeArticle(params.pageName, articleId)
+		await API.delete('/articles/mark', {
+			data: {
+				user_id: localStorage.getItem('user_id'),
+				article_ids: [articleId],
+			},
+		})
 
-	function removeFromCollection(articleId) {
-		removeArticle(params.pageName, articleId).then(() =>
-			setArticles((prev) => prev.filter((article) => article.id !== articleId))
-		)
+		setArticles((prev) => prev.filter((article) => article.id !== articleId))
 	}
 
 	useEffect(() => {

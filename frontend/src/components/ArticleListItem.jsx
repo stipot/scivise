@@ -21,8 +21,8 @@ function ArticleListItem({ article, removeFromCollection }) {
 				))}
 			</div>
 			<IconButton
-				className="delete_article"
-				onClick={() => removeFromCollection(article.id)}
+				className="cross_button"
+				onClick={async () => await removeFromCollection(article.id)}
 			>
 				╳
 			</IconButton>

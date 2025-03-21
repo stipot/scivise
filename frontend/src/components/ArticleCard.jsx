@@ -8,6 +8,7 @@ import DislikeIcon from './icons/DislikeIcon'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import SelectCollectionModal from './SelectCollectionModal'
+import API from '../api'
 
 function ArticleCard({ article, move, style, collections }) {
 	const [transitionClass, setTransitionClass] = useState('')
@@ -34,17 +35,29 @@ function ArticleCard({ article, move, style, collections }) {
 		let articleIdx = getArticleIdx(article.id)
 		console.log(articles.slice(0, articleIdx), article)
 
+		const articleIds = [article.id]
 		for (let dislikedArticle of articles.slice(0, articleIdx)) {
 			await addArticle('Дизлайки', dislikedArticle)
+			articleIds.push(dislikedArticle.id)
 		}
+		await API.post('/articles/mark', {
+			user_id: localStorage.getItem('user_id'),
+			article_ids: articleIds,
+		})
 		setTransitionClass('article_card_moved_right')
 	}
 
 	async function dislike() {
 		let articleIdx = getArticleIdx(article.id)
+		const articleIds = []
 		for (let dislikedArticle of articles.slice(0, articleIdx + 1)) {
 			await addArticle('Дизлайки', dislikedArticle)
+			articleIds.push(dislikedArticle.id)
 		}
+		await API.post('/articles/mark', {
+			user_id: localStorage.getItem('user_id'),
+			article_ids: articleIds,
+		})
 		setTransitionClass('article_card_moved_left')
 	}
 
