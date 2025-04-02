@@ -1,7 +1,7 @@
 from flask import Blueprint
 from app.services import users as users_service
 
-users_router = Blueprint('users', __name__, url_prefix='/')
+users_router = Blueprint('users', __name__, url_prefix='/api/')
 
 
 @users_router.post('/add_user')

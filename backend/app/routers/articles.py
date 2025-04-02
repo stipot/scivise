@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from app.services import articles as article_service
 from app.models.base import Session
 
-articles_router = Blueprint('articles', __name__, url_prefix='/articles')
+articles_router = Blueprint('articles', __name__, url_prefix='/api/articles')
 
 
 @articles_router.get('/')
