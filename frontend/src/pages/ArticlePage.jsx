@@ -1,23 +1,24 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { Container, Toolbar, Box, Button } from '@mui/material'
+import Snackbar from '@mui/material/Snackbar';
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LikeIcon from '../components/icons/LikeIcon'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { addArticle, getObjectStoresInfo } from '../db'
 import SelectCollectionModal from '../components/SelectCollectionModal'
+import API from '../api'
+import CopyIcon from '../components/icons/CopyIcon';
 
 function ArticlePage() {
 	const { articles, setArticles, isDbInitialized } = useContext(AppContext)
 	let params = useParams()
-	const article = articles.filter(
-		(article) => article.id === parseInt(params.articleId)
-	)[0]
-	console.log(params, article)
 
 	const [isButtonClicked, setIsButtonClicked] = useState(false)
 	const [openModal, setOpenModal] = useState(false)
 	const [collections, setCollections] = useState(null)
+	const [article, setArticle] = useState(null)
+	const [openBar, setOpenBar] = useState(false)
 
 	function getArticleIdx(articleId) {
 		let articleIdx = 0
@@ -43,6 +44,25 @@ function ArticlePage() {
 		setIsButtonClicked(true)
 	}
 
+	function handleCopy() {
+		const url = `${window.location.protocol}//${window.location.host}/${params.articleId}`
+		navigator.clipboard.writeText(url).then(() => {
+			setOpenBar(true)
+		  })
+	}
+
+	useEffect(() => {
+		if (articles.length > 0) {
+			setArticle(articles.filter(
+				(article) => article.id === parseInt(params.articleId)
+			)[0])
+		} else {
+			API.get('/articles/', {params: {article_id: [parseInt(params.articleId)]}})
+			.then(res => setArticle(res.data))
+		}
+		
+	}, [])
+
 	useEffect(() => {
 		if (!isDbInitialized) return
 
@@ -55,7 +75,7 @@ function ArticlePage() {
 
 	return (
 		<>
-			{collections && (
+			{collections && article &&(
 				<>
 					<Container maxWidth="xl">
 						<Toolbar
@@ -88,6 +108,20 @@ function ArticlePage() {
 								>
 									<LikeIcon />
 								</Button>
+								<Button
+									variant="outlined"
+									onClick={handleCopy}
+									sx={{position: 'absolute', right: 0, width: '30px', height: '42px'}}
+								>
+									<CopyIcon/>
+								</Button>
+
+								<Snackbar
+									open={openBar}
+									autoHideDuration={2000}
+									message="Ссылка скопирована"
+									onClose={() => setOpenBar(false)}
+								/>
 							</Box>
 						</Toolbar>
 					</Container>
