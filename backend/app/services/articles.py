@@ -33,6 +33,13 @@ def get_articles(
         return articles
 
 
+def get_article(Session: sessionmaker[Session], article_id: int):
+    with Session() as session:
+        stmt = select(Article).join(Article.authors).where(Article.id == article_id)
+        article = session.execute(stmt.options(selectinload(Article.authors))).scalars().all()[0]
+        return article
+
+
 def mark_article(Session: sessionmaker[Session], article_ids: list, user_id: str):
     with Session() as session:
         stmt = insert(users_articles).values(

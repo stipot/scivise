@@ -7,7 +7,7 @@ articles_router = Blueprint('articles', __name__, url_prefix='/articles')
 
 
 @articles_router.get('/')
-def get_article():
+def get_articles():
     article_ids = request.args.getlist('article_ids[]', type=int)
     page = request.args.get('page', 1, type=int)
     user_id = request.args.get('user_id', type=str)
@@ -16,6 +16,14 @@ def get_article():
     )
     articles = [asdict(article) for article in articles]
     return articles, 200
+
+
+@articles_router.get('/article')
+def get_article():
+    article_id = request.args.get('article_id', type=int)
+    article = article_service.get_article(Session=Session, article_id=article_id)
+    print(article)
+    return asdict(article), 200
 
 
 @articles_router.post('/mark')
