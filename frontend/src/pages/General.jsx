@@ -3,12 +3,15 @@ import ArticleCard from '../components/ArticleCard'
 import API from './../api'
 import { AppContext } from '../context/AppContext'
 import { getObjectStoresInfo } from '../db'
+import { Button } from '@mui/material'
+import FiltersModal from '../components/FiltersModal'
 
 function General() {
 	const { articles, setArticles, isDbInitialized } = useContext(AppContext)
 	const [page, setPage] = useState(1)
 	const [collections, setCollections] = useState(null)
 	const [stopRequesting, setStopRequesting] = useState(false)
+	const [openFilters, setOpenFilters] = useState(false)
 
 	function getArticles(page, articleIds) {
 		const params = {
@@ -59,6 +62,7 @@ function General() {
 
 	return (
 		<div className="general_page">
+			<Button onClick={() => setOpenFilters(true)}>Фильтры</Button>
 			<div className="article_card_list">
 				{articles.length > 0 &&
 					collections &&
@@ -71,6 +75,7 @@ function General() {
 						/>
 					))}
 			</div>
+			<FiltersModal open={openFilters} handleClose={() => setOpenFilters(false)}/>
 		</div>
 	)
 }
