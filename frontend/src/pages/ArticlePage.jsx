@@ -45,7 +45,7 @@ function ArticlePage() {
 	}
 
 	function handleCopy() {
-		const url = `${window.location.protocol}//${window.location.host}/${params.articleId}`
+		const url = `${window.location.protocol}//${window.location.host}/article/${params.articleId}`
 		navigator.clipboard.writeText(url).then(() => {
 			setOpenBar(true)
 		  })
@@ -57,7 +57,7 @@ function ArticlePage() {
 				(article) => article.id === parseInt(params.articleId)
 			)[0])
 		} else {
-			API.get('/articles/', {params: {article_id: [parseInt(params.articleId)]}})
+			API.get('/articles/article', {params: {article_id: params.articleId}})
 			.then(res => setArticle(res.data))
 		}
 		
