@@ -12,6 +12,11 @@ function General() {
 	const [collections, setCollections] = useState(null)
 	const [stopRequesting, setStopRequesting] = useState(false)
 	const [openFilters, setOpenFilters] = useState(false)
+	const [filterValues, setFilterValues] = useState({
+		keywords: [],
+		categories: [],
+		authors: [],
+	})
 
 	function getArticles(page, articleIds) {
 		const params = {
@@ -25,6 +30,15 @@ function General() {
 
 		return API.get('/articles/', { params })
 	}
+
+	useEffect(
+		() =>
+			API.get('/articles/filters_values').then((res) => {
+				console.log(res.data)
+				setFilterValues(res.data)
+			}),
+		[]
+	)
 
 	useEffect(() => {
 		if (!isDbInitialized) return
@@ -75,7 +89,13 @@ function General() {
 						/>
 					))}
 			</div>
-			<FiltersModal open={openFilters} handleClose={() => setOpenFilters(false)}/>
+			<FiltersModal
+				open={openFilters}
+				handleClose={() => setOpenFilters(false)}
+				categories={filterValues.categories}
+				authors={filterValues.authors}
+				keywords={filterValues.keywords}
+			/>
 		</div>
 	)
 }
