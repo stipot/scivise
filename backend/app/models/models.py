@@ -35,7 +35,7 @@ users_articles = Table(
 
 
 class Keyword(Base):
-    __tablename__ = "users"
+    __tablename__ = "keywords"
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
     keyword: Mapped[str] = mapped_column(String(255))
 

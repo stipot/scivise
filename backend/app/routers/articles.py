@@ -26,6 +26,12 @@ def get_article():
     return asdict(article), 200
 
 
+@articles_router.get('/filters_values')
+def get_filters_values():
+    filters_values = article_service.get_filters_values(Session)
+    return filters_values, 200
+
+
 @articles_router.post('/mark')
 def mark_article():
     data = request.get_json()

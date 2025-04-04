@@ -33,10 +33,24 @@ def get_articles(
         return articles
 
 
+def get_filters_values(Session: sessionmaker[Session]):
+    with Session() as session:
+        authors = session.execute(select(Author.author_name)).scalars().all()
+        categories = (
+            session.execute(select(Article.category).distinct()).scalars().all()
+        )
+        keywords = []
+        return {'keywords': keywords, 'categories': categories, 'authors': authors}
+
+
 def get_article(Session: sessionmaker[Session], article_id: int):
     with Session() as session:
         stmt = select(Article).join(Article.authors).where(Article.id == article_id)
-        article = session.execute(stmt.options(selectinload(Article.authors))).scalars().all()[0]
+        article = (
+            session.execute(stmt.options(selectinload(Article.authors)))
+            .scalars()
+            .all()[0]
+        )
         return article
 
 
