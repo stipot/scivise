@@ -9,10 +9,20 @@ articles_router = Blueprint('articles', __name__, url_prefix='/api/articles')
 @articles_router.get('/')
 def get_articles():
     article_ids = request.args.getlist('article_ids[]', type=int)
+    keywords = request.args.getlist('keywords[]', type=str)
+    authors = request.args.getlist('authors[]', type=str)
+    categories = request.args.getlist('categories[]', type=str)
     page = request.args.get('page', 1, type=int)
     user_id = request.args.get('user_id', type=str)
     articles = article_service.get_articles(
-        Session, page=page, limit=12, user_id=user_id, shown_article_ids=article_ids
+        Session,
+        page=page,
+        limit=12,
+        user_id=user_id,
+        shown_article_ids=article_ids,
+        categories=categories,
+        authors=authors,
+        keywords=keywords,
     )
     articles = [asdict(article) for article in articles]
     return articles, 200

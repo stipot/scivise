@@ -9,6 +9,9 @@ def get_articles(
     page: int = 1,
     limit: int = 10,
     shown_article_ids: list = None,
+    authors: list = None,
+    categories: list = None,
+    keywords: list = None,
 ):
     # offset = limit * (page - 1)
     with Session() as session:
@@ -21,12 +24,22 @@ def get_articles(
                 (users_articles.c.article_id == Article.id)
                 & (users_articles.c.user_id == user_id),
             )
-            .join(Article.authors)
-            .where(users_articles.c.user_id.is_(None))
         )
         if shown_article_ids:
             stmt = stmt.where(Article.id.not_in(shown_article_ids))
-        print(stmt)
+
+        if authors:
+            stmt = stmt.join(Article.authors).filter(Author.author_name.in_(authors))
+        else:
+            stmt = stmt.join(Article.authors)
+
+        # if keywords:
+        #     stmt = stmt.where(Article.keywords.in_(keywords))
+
+        if categories:
+            stmt = stmt.where(Article.category.in_(categories))
+
+        stmt = stmt.where(users_articles.c.user_id.is_(None))
         articles = (
             session.execute(stmt.options(selectinload(Article.authors))).scalars().all()
         )
