@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
 	Select,
 	OutlinedInput,
@@ -19,13 +19,14 @@ const MenuProps = {
 	},
 }
 
-function ChipSelect({ name, data, dataField, label }) {
-	const [value, setValue] = useState([])
+function ChipSelect({ name, data, dataField, label, setState, state }) {
 	const handleChange = (event) => {
 		const {
 			target: { value },
 		} = event
-		setValue(value)
+		setState((prev) => {
+			return { ...prev, [name]: value }
+		})
 	}
 	return (
 		<>
@@ -34,7 +35,7 @@ function ChipSelect({ name, data, dataField, label }) {
 				labelId={`${name}-multiple-chip-label`}
 				id={`${name}-multiple-chip`}
 				multiple
-				value={value}
+				value={state}
 				onChange={handleChange}
 				input={<OutlinedInput id={`select-chip-${name}`} label={label} />}
 				renderValue={(selected) => (

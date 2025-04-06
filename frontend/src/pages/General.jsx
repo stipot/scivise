@@ -17,6 +17,12 @@ function General() {
 		categories: [],
 		authors: [],
 	})
+	const [formState, setFormState] = useState({
+		authors: [],
+		categories: [],
+		keywords: [],
+	})
+	const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
 	function getArticles(page, articleIds) {
 		const params = {
@@ -26,6 +32,16 @@ function General() {
 
 		if (articleIds) {
 			params.article_ids = articleIds
+		}
+
+		if (formState.keywords) {
+			params.keywords = formState.keywords
+		}
+		if (formState.categories) {
+			params.categories = formState.categories
+		}
+		if (formState.authors) {
+			params.authors = formState.authors
 		}
 
 		return API.get('/articles/', { params })
@@ -63,6 +79,17 @@ function General() {
 		}
 	}, [articles]) // eslint-disable-line react-hooks/exhaustive-deps
 
+	useEffect(() => {
+		if (isFormSubmitted) {
+			getArticles().then((res) => {
+				console.log(res.data)
+
+				setArticles(res.data)
+			})
+			setIsFormSubmitted(false)
+		}
+	}, [isFormSubmitted]) // eslint-disable-line react-hooks/exhaustive-deps
+
 	function move(articleId) {
 		let articleIdx = 0
 		articles.forEach((article, idx) => {
@@ -94,6 +121,9 @@ function General() {
 				categories={filterValues.categories}
 				authors={filterValues.authors}
 				keywords={filterValues.keywords}
+				formState={formState}
+				setFormState={setFormState}
+				setIsFormSubmitted={setIsFormSubmitted}
 			/>
 		</div>
 	)

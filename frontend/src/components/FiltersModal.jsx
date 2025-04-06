@@ -2,7 +2,22 @@ import { Box, Modal, FormControl, Typography, Button } from '@mui/material'
 import React from 'react'
 import ChipSelect from './ChipSelect'
 
-function FiltersModal({ open, handleClose, keywords, authors, categories }) {
+function FiltersModal({
+	open,
+	handleClose,
+	keywords,
+	authors,
+	categories,
+	formState,
+	setFormState,
+	setIsFormSubmitted,
+}) {
+	function submit(e) {
+		e.preventDefault()
+		console.log(formState)
+		setIsFormSubmitted(true)
+		handleClose(false)
+	}
 	return (
 		<Modal open={open} onClose={handleClose}>
 			<Box
@@ -23,6 +38,7 @@ function FiltersModal({ open, handleClose, keywords, authors, categories }) {
 						maxHeight: 400,
 						overflow: 'auto',
 					}}
+					onSubmit={submit}
 				>
 					<FormControl sx={{ m: 1, width: 330 }}>
 						<ChipSelect
@@ -30,6 +46,8 @@ function FiltersModal({ open, handleClose, keywords, authors, categories }) {
 							data={categories}
 							dataField=""
 							label="Категории"
+							setState={setFormState}
+							state={formState.categories}
 						/>
 					</FormControl>
 					<FormControl sx={{ m: 1, width: 330 }}>
@@ -38,6 +56,8 @@ function FiltersModal({ open, handleClose, keywords, authors, categories }) {
 							data={authors}
 							dataField=""
 							label="Авторы"
+							setState={setFormState}
+							state={formState.authors}
 						/>
 					</FormControl>
 					<FormControl sx={{ m: 1, width: 330 }}>
@@ -46,9 +66,11 @@ function FiltersModal({ open, handleClose, keywords, authors, categories }) {
 							data={keywords}
 							dataField=""
 							label="Ключевые слова"
+							setState={setFormState}
+							state={formState.keywords}
 						/>
 					</FormControl>
-					<Button variant="contained" sx={{ marginTop: '10px' }}>
+					<Button variant="contained" sx={{ marginTop: '10px' }} type="submit">
 						Применить
 					</Button>
 				</form>
