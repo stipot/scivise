@@ -31,14 +31,13 @@ function General() {
 		return API.get('/articles/', { params })
 	}
 
-	useEffect(
-		() =>
-			API.get('/articles/filters_values').then((res) => {
-				console.log(res.data)
-				setFilterValues(res.data)
-			}),
-		[]
-	)
+	useEffect(() => {
+		API.get('/articles/filters_values').then((res) => {
+			console.log(res.data)
+			setFilterValues(res.data)
+		})
+		return () => {}
+	}, [])
 
 	useEffect(() => {
 		if (!isDbInitialized) return
