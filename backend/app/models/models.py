@@ -25,13 +25,13 @@ users_articles = Table(
     UniqueConstraint('user_id', 'article_id'),
 )
 
-# article_keywords = Table(
-#     'article_keywords',
-#     Base.metadata,
-#     Column('keyword_id', ForeignKey('keywords.id')),
-#     Column('article_id', ForeignKey('articles.id')),
-#     UniqueConstraint('keyword_id', 'article_id'),
-# )
+article_keywords = Table(
+    'article_keywords',
+    Base.metadata,
+    Column('keyword_id', ForeignKey('keywords.id')),
+    Column('article_id', ForeignKey('articles.id')),
+    UniqueConstraint('keyword_id', 'article_id'),
+)
 
 
 class Keyword(Base):
@@ -64,7 +64,7 @@ class Article(Base):
     )
     category: Mapped[str] = mapped_column(String(40), nullable=False)
     annotation: Mapped[str] = mapped_column(String(1000), init=False, nullable=True)
-    # keywords: Mapped[List[Keyword]] = relationship(secondary=article_keywords)
+    keywords: Mapped[List[Keyword]] = relationship(secondary=article_keywords)
     publication_date: Mapped[str] = mapped_column(String(10))
     content: Mapped[str]
     authors: Mapped[List[Author]] = relationship(secondary=authors_articles)

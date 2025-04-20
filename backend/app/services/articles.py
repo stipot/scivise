@@ -1,6 +1,13 @@
 from sqlalchemy import delete, select, insert
 from sqlalchemy.orm import sessionmaker, Session, selectinload
-from app.models.models import Article, Author, users_articles
+from app.models.models import Article, Author, Keyword, users_articles
+from keybert import KeyBERT
+from flair.embeddings import TransformerDocumentEmbeddings
+from app.stopwords.ru_stopwords import stopwords
+import re
+
+# import pymorphy3
+# import yake
 
 
 def get_articles(
@@ -33,8 +40,8 @@ def get_articles(
         else:
             stmt = stmt.join(Article.authors)
 
-        # if keywords:
-        #     stmt = stmt.where(Article.keywords.in_(keywords))
+        if keywords:
+            stmt = stmt.where(Article.keywords.in_(keywords))
 
         if categories:
             stmt = stmt.where(Article.category.in_(categories))
@@ -98,10 +105,67 @@ def create_article(Session: sessionmaker[Session], article: Article):
             if not res:
                 author = Author(author_name=author_name)
                 session.add(author)
-                session.flush()
             else:
                 author = res[0]
             authors.append(author)
+        session.flush()
         article.authors = authors
+
+        # custom_kw_extractor = yake.KeywordExtractor(
+        #     lan='ru',
+        #     n=3,
+        #     top=5,
+        #     stopwords=stopwords,
+        # )
+        # keywords = custom_kw_extractor.extract_keywords(
+        #     re.sub(
+        #         r'\d+',
+        #         '',
+        #         article.annotation if article.annotation else article.content,
+        #     )
+        # )
+
+        rubert = TransformerDocumentEmbeddings('cointegrated/rubert-tiny2')
+        kw_model = KeyBERT(rubert)
+        keywords = kw_model.extract_keywords(
+            re.sub(
+                r'\d+',
+                '',
+                article.annotation if article.annotation else article.content,
+            ),
+            keyphrase_ngram_range=(1, 2),
+            stop_words=stopwords,
+            # use_mmr=True,
+            # diversity=0.7,
+            top_n=5,
+        )
+
+        # morph = pymorphy3.MorphAnalyzer()
+        # normal_keywords = []
+        # for keyword in keywords:
+        #     normal_keywords.append(
+        #         ' '.join(
+        #             [
+        #                 morph.parse(word)[0].inflect({'nomn'}).word
+        #                 for word in keyword[0].split()
+        #             ]
+        #         )
+        #     )
+
+        keywords = [item[0] for item in keywords]
+        keywords = list(set(keywords))
+        keywords.extend(article.keywords)
+        article.keywords = []
+        for keyword in keywords:
+            stmt = select(Keyword).where(Keyword.keyword == keyword)
+            res = session.execute(stmt).one_or_none()
+            if not res:
+                keyword_obj = Keyword(keyword=keyword)
+                session.add(keyword_obj)
+            else:
+                keyword_obj = res[0]
+            article.keywords.append(keyword_obj)
+        session.flush()
+
         session.add(article)
         session.commit()
