@@ -43,6 +43,8 @@ def get_articles(
         if keywords:
             stmt = stmt.join(Article.keywords).filter(Keyword.keyword.in_(keywords))
 
+        stmt = stmt.group_by(Article.id)
+
         if categories:
             stmt = stmt.where(Article.category.in_(categories))
 
