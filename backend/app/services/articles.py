@@ -86,9 +86,19 @@ def get_filter_values(
 
 def get_article(Session: sessionmaker[Session], article_id: int):
     with Session() as session:
-        stmt = select(Article).join(Article.authors).where(Article.id == article_id)
+        stmt = (
+            select(Article)
+            .join(Article.authors)
+            .join(Article.keywords)
+            .group_by(Article.id)
+            .where(Article.id == article_id)
+        )
         article = (
-            session.execute(stmt.options(selectinload(Article.authors)))
+            session.execute(
+                stmt.options(
+                    selectinload(Article.authors), selectinload(Article.keywords)
+                )
+            )
             .scalars()
             .all()[0]
         )
@@ -117,7 +127,9 @@ def delete_mark(Session: sessionmaker[Session], article_ids: list, user_id: str)
         session.commit()
 
 
-def create_article(Session: sessionmaker[Session], article: Article):
+def create_article(
+    Session: sessionmaker[Session], article: Article, gen_keywords: bool = True
+):
     with Session() as session:
         authors = []
         for author_name in article.authors:
@@ -132,52 +144,28 @@ def create_article(Session: sessionmaker[Session], article: Article):
         session.flush()
         article.authors = authors
 
-        # custom_kw_extractor = yake.KeywordExtractor(
-        #     lan='ru',
-        #     n=3,
-        #     top=5,
-        #     stopwords=stopwords,
-        # )
-        # keywords = custom_kw_extractor.extract_keywords(
-        #     re.sub(
-        #         r'\d+',
-        #         '',
-        #         article.annotation if article.annotation else article.content,
-        #     )
-        # )
+        if gen_keywords:
+            rubert = TransformerDocumentEmbeddings('cointegrated/rubert-tiny2')
+            kw_model = KeyBERT(rubert)
+            keywords = kw_model.extract_keywords(
+                re.sub(
+                    r'\d+',
+                    '',
+                    article.annotation if article.annotation else article.content,
+                ),
+                keyphrase_ngram_range=(1, 2),
+                stop_words=stopwords,
+                # use_mmr=True,
+                # diversity=0.7,
+                top_n=5,
+            )
 
-        rubert = TransformerDocumentEmbeddings('cointegrated/rubert-tiny2')
-        kw_model = KeyBERT(rubert)
-        keywords = kw_model.extract_keywords(
-            re.sub(
-                r'\d+',
-                '',
-                article.annotation if article.annotation else article.content,
-            ),
-            keyphrase_ngram_range=(1, 2),
-            stop_words=stopwords,
-            # use_mmr=True,
-            # diversity=0.7,
-            top_n=5,
-        )
+            keywords = [item[0] for item in keywords]
+            keywords = list(set(keywords))
+            article.keywords.extend(keywords)
 
-        # morph = pymorphy3.MorphAnalyzer()
-        # normal_keywords = []
-        # for keyword in keywords:
-        #     normal_keywords.append(
-        #         ' '.join(
-        #             [
-        #                 morph.parse(word)[0].inflect({'nomn'}).word
-        #                 for word in keyword[0].split()
-        #             ]
-        #         )
-        #     )
-
-        keywords = [item[0] for item in keywords]
-        keywords = list(set(keywords))
-        keywords.extend(article.keywords)
-        article.keywords = []
-        for keyword in keywords:
+        keywords = []
+        for keyword in article.keywords:
             stmt = select(Keyword).where(Keyword.keyword == keyword)
             res = session.execute(stmt).one_or_none()
             if not res:
@@ -185,8 +173,9 @@ def create_article(Session: sessionmaker[Session], article: Article):
                 session.add(keyword_obj)
             else:
                 keyword_obj = res[0]
-            article.keywords.append(keyword_obj)
+            keywords.append(keyword_obj)
         session.flush()
+        article.keywords = keywords
 
         session.add(article)
         session.commit()
