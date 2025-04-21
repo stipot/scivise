@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { Container, Toolbar, Box, Button } from '@mui/material'
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar from '@mui/material/Snackbar'
 import DislikeIcon from '../components/icons/DislikeIcon'
 import LikeIcon from '../components/icons/LikeIcon'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { addArticle, getObjectStoresInfo } from '../db'
 import SelectCollectionModal from '../components/SelectCollectionModal'
 import API from '../api'
-import CopyIcon from '../components/icons/CopyIcon';
+import CopyIcon from '../components/icons/CopyIcon'
 
 function ArticlePage() {
 	const { articles, setArticles, isDbInitialized } = useContext(AppContext)
@@ -48,20 +48,22 @@ function ArticlePage() {
 		const url = `${window.location.protocol}//${window.location.host}/article/${params.articleId}`
 		navigator.clipboard.writeText(url).then(() => {
 			setOpenBar(true)
-		  })
+		})
 	}
 
 	useEffect(() => {
 		if (articles.length > 0) {
-			setArticle(articles.filter(
-				(article) => article.id === parseInt(params.articleId)
-			)[0])
+			setArticle(
+				articles.filter(
+					(article) => article.id === parseInt(params.articleId)
+				)[0]
+			)
 		} else {
-			API.get('/articles/article', {params: {article_id: params.articleId}})
-			.then(res => setArticle(res.data))
+			API.get('/articles/article', {
+				params: { article_id: params.articleId },
+			}).then((res) => setArticle(res.data))
 		}
-		
-	}, [])
+	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		if (!isDbInitialized) return
@@ -75,7 +77,7 @@ function ArticlePage() {
 
 	return (
 		<>
-			{collections && article &&(
+			{collections && article && (
 				<>
 					<Container maxWidth="xl">
 						<Toolbar
@@ -111,9 +113,14 @@ function ArticlePage() {
 								<Button
 									variant="outlined"
 									onClick={handleCopy}
-									sx={{position: 'absolute', right: 0, width: '30px', height: '42px'}}
+									sx={{
+										position: 'absolute',
+										right: 0,
+										width: '30px',
+										height: '42px',
+									}}
 								>
-									<CopyIcon/>
+									<CopyIcon />
 								</Button>
 
 								<Snackbar

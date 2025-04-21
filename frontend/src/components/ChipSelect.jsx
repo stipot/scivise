@@ -1,8 +1,17 @@
 import React from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 
-function ChipSelect({ name, data, dataField, label, setState, state }) {
-	const [loading, setLoading] = React.useState(false)
+function ChipSelect({
+	name,
+	data,
+	dataField,
+	label,
+	setState,
+	state,
+	loading = false,
+	setInputState = (v) => {},
+}) {
+	// const [loading, setLoading] = React.useState(false)
 
 	const handleChange = (event, value) => {
 		setState((prev) => {
@@ -23,7 +32,7 @@ function ChipSelect({ name, data, dataField, label, setState, state }) {
 				limitTags={2}
 				noOptionsText={'Не найдено'}
 				loadingText={'Загрузка...'}
-				// getOptionLabel={(option) => option.title}
+				onInputChange={(event, value) => setInputState(value)}
 				renderInput={(params) => <TextField {...params} label={label} />}
 			/>
 		</>

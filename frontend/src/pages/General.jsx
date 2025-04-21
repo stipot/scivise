@@ -34,26 +34,18 @@ function General() {
 			params.article_ids = articleIds
 		}
 
-		if (formState.keywords) {
+		if (formState.keywords.length > 0) {
 			params.keywords = formState.keywords
 		}
-		if (formState.categories) {
+		if (formState.categories.length > 0) {
 			params.categories = formState.categories
 		}
-		if (formState.authors) {
+		if (formState.authors.length > 0) {
 			params.authors = formState.authors
 		}
 
 		return API.get('/articles/', { params })
 	}
-
-	useEffect(() => {
-		API.get('/articles/filters_values').then((res) => {
-			console.log(res.data)
-			setFilterValues(res.data)
-		})
-		return () => {}
-	}, [])
 
 	useEffect(() => {
 		if (!isDbInitialized) return
@@ -118,9 +110,11 @@ function General() {
 			<FiltersModal
 				open={openFilters}
 				handleClose={() => setOpenFilters(false)}
-				categories={filterValues.categories}
-				authors={filterValues.authors}
-				keywords={filterValues.keywords}
+				// categories={filterValues.categories}
+				// authors={filterValues.authors}
+				// keywords={filterValues.keywords}
+				filterValues={filterValues}
+				setFilterValues={setFilterValues}
 				formState={formState}
 				setFormState={setFormState}
 				setIsFormSubmitted={setIsFormSubmitted}
