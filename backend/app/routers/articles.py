@@ -36,10 +36,14 @@ def get_article():
     return asdict(article), 200
 
 
-@articles_router.get('/filters_values')
-def get_filters_values():
-    filters_values = article_service.get_filters_values(Session)
-    return filters_values, 200
+@articles_router.get('/filter_values')
+def get_filter_values():
+    filter_name = request.args.get('filter_name', type=str)
+    start_val = request.args.get('start_val', type=str)
+    filter_values = article_service.get_filter_values(
+        Session, filter_name=filter_name, start_val=start_val
+    )
+    return filter_values, 200
 
 
 @articles_router.post('/mark')

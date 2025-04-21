@@ -41,26 +41,45 @@ def get_articles(
             stmt = stmt.join(Article.authors)
 
         if keywords:
-            stmt = stmt.where(Article.keywords.in_(keywords))
+            stmt = stmt.join(Article.keywords).filter(Keyword.keyword.in_(keywords))
 
         if categories:
             stmt = stmt.where(Article.category.in_(categories))
 
         stmt = stmt.where(users_articles.c.user_id.is_(None))
         articles = (
-            session.execute(stmt.options(selectinload(Article.authors))).scalars().all()
+            session.execute(
+                stmt.options(
+                    selectinload(Article.authors), selectinload(Article.keywords)
+                )
+            )
+            .scalars()
+            .all()
         )
         return articles
 
 
-def get_filters_values(Session: sessionmaker[Session]):
+def get_filter_values(
+    Session: sessionmaker[Session], filter_name: str, start_val: str | None = None
+):
     with Session() as session:
-        authors = session.execute(select(Author.author_name)).scalars().all()
-        categories = (
-            session.execute(select(Article.category).distinct()).scalars().all()
-        )
-        keywords = []
-        return {'keywords': keywords, 'categories': categories, 'authors': authors}
+        if filter_name == 'categories':
+            stmt = select(Article.category).distinct()
+
+        if filter_name == 'authors':
+            stmt = select(Author.author_name)
+            if start_val:
+                stmt = stmt.where(Author.author_name.startswith(start_val))
+            stmt = stmt.limit(15)
+
+        if filter_name == 'keywords':
+            stmt = select(Keyword.keyword)
+            if start_val:
+                stmt = stmt.where(Keyword.keyword.startswith(start_val))
+            stmt = stmt.limit(15)
+
+        values = session.execute(stmt).scalars().all()
+        return values
 
 
 def get_article(Session: sessionmaker[Session], article_id: int):
