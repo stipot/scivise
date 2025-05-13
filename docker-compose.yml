@@ -1,4 +1,16 @@
 services:
+  elasticsearch:
+    image: 'elasticsearch:8.18.0'
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - '9200:9200'
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
   backend:
     build: 
       context: .
@@ -15,6 +27,10 @@ services:
         CMD ["gunicorn", "-b", "0.0.0.0:5000", "main:get_app()"]
         EXPOSE 5000
     restart: always
+    env_file: '.env'
+    depends_on:
+      elasticsearch:
+        condition: service_started
   frontend:
     build: 
       context: .
@@ -42,3 +58,6 @@ services:
       - '80:80'
       - '443:443'
       - '4000:4000'
+    depends_on:
+      backend:
+        condition: service_started

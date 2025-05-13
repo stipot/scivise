@@ -1,3 +1,4 @@
+from elasticsearch import Elasticsearch
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from app.models.models import Article
@@ -23,7 +24,7 @@ def create_tables():
             type='news',
             category=row['category'],
             publication_date=pub_date,
-            content=row['plain_text'],
+            annotation=row['plain_text'][:1000],
             authors=[row['author']],
             magazine='Naked Science',
             link=row['link'],
@@ -36,7 +37,7 @@ def create_tables():
     print(time.time() - start)
 
 
-def fast_create_tables():
+def fast_create_tables(es: Elasticsearch):
     Base.metadata.create_all(engine)
     news_df = pd.read_csv('./rss_feeder/nc_keywords_test.csv')
 
@@ -51,19 +52,20 @@ def fast_create_tables():
             type='news',
             category=row['category'],
             publication_date=pub_date,
-            content=row['plain_text'],
+            annotation=row['plain_text'][:1000],
             authors=[row['author']],
             magazine='Naked Science',
             link=row['link'],
             keywords=row['keywords'].split(';'),
         )
         article_service.create_article(
-            Session=Session, article=article, gen_keywords=False
+            Session=Session, es=es, article=article, gen_keywords=False
         )
 
     start = time.time()
     news_df.apply(create_news, axis=1)
     print(time.time() - start)
+    print(article_service.search_articles(es=es, search_phrase='эксперименты'))
 
 
 def save_keywords():

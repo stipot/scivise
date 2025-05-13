@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 from app.services import articles as article_service
 from app.models.base import Session
 
@@ -34,6 +34,20 @@ def get_article():
     article = article_service.get_article(Session=Session, article_id=article_id)
     print(article)
     return asdict(article), 200
+
+
+@articles_router.get('/search')
+def search_articles():
+    search_phrase = request.args.get('search_phrase', type=str)
+    last_sort = request.args.get('last_sort', type=str)
+    last_sort = last_sort.split('_') if last_sort else []
+    last_sort = (
+        [float(last_sort[0]), int(last_sort[1])] if len(last_sort) == 2 else None
+    )
+    result = article_service.search_articles(
+        es=current_app.es, search_phrase=search_phrase, search_after=last_sort
+    )
+    return result, 200
 
 
 @articles_router.get('/filter_values')

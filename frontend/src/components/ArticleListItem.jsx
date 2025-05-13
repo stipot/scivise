@@ -1,7 +1,7 @@
 import { Card, IconButton, Typography } from '@mui/material'
 import React from 'react'
 
-function ArticleListItem({ article, removeFromCollection }) {
+function ArticleListItem({ article, removeFromCollection = null }) {
 	return (
 		<Card className="article_list_item">
 			<Typography className="article_card_info_magazine">
@@ -15,17 +15,22 @@ function ArticleListItem({ article, removeFromCollection }) {
 
 			<div className="article_card_info_authors">
 				{article.authors.map((author) => (
-					<Typography className="article_card_info_author" key={author.id}>
-						{author.author_name}
+					<Typography
+						className="article_card_info_author"
+						key={typeof author === 'string' ? author : author.id}
+					>
+						{typeof author === 'string' ? author : author.author_name}
 					</Typography>
 				))}
 			</div>
-			<IconButton
-				className="cross_button"
-				onClick={async () => await removeFromCollection(article.id)}
-			>
-				╳
-			</IconButton>
+			{removeFromCollection && (
+				<IconButton
+					className="cross_button"
+					onClick={async () => await removeFromCollection(article.id)}
+				>
+					╳
+				</IconButton>
+			)}
 		</Card>
 	)
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const ADDRESS = process.env.REACT_APP_SERVER_ADDRESS
 	? process.env.REACT_APP_SERVER_ADDRESS
-	: 'https://scivise.com/api' //'http://localhost:3010/api'
+	: 'http://localhost:3010/api' //'https://scivise.com/api'
 
 const API = axios.create({
 	baseURL: ADDRESS,

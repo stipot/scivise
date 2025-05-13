@@ -1,3 +1,5 @@
+from copy import deepcopy
+from elasticsearch import Elasticsearch
 from sqlalchemy import delete, select, insert
 from sqlalchemy.orm import sessionmaker, Session, selectinload
 from app.models.models import Article, Author, Keyword, users_articles
@@ -105,6 +107,65 @@ def get_article(Session: sessionmaker[Session], article_id: int):
         return article
 
 
+def search_articles(
+    es: Elasticsearch,
+    search_phrase: str,
+    limit: int = 12,
+    search_after: dict | None = None,
+):
+    body = {
+        'query': {
+            "bool": {
+                "should": [
+                    {
+                        'multi_match': {
+                            'query': search_phrase,
+                            'fields': [
+                                'title',
+                                'category',
+                                'annotation',
+                                'keywords',
+                                'authors',
+                                'magazine',
+                            ],
+                        },
+                    },
+                    {"match": {"title": {"query": search_phrase, "fuzziness": 'AUTO'}}},
+                    {
+                        "match": {
+                            "keywords": {"query": search_phrase, "fuzziness": 'AUTO'}
+                        }
+                    },
+                    {
+                        "match": {
+                            "annotation": {"query": search_phrase, "fuzziness": 'AUTO'}
+                        }
+                    },
+                ]
+            },
+        },
+        'size': limit,
+        'sort': [{'_score': 'desc'}, {'publication_date': 'desc'}],
+    }
+
+    if search_after is not None:
+        body['search_after'] = search_after
+
+    resp = es.search(index='scivise_articles', body=body)
+    print(resp)
+
+    # result = resp['hits']['hits'] if resp['hits']['total']['value'] > 0 else []
+    result = [hit['_source'] for hit in resp['hits']['hits']]
+    last_sort = (
+        resp['hits']['hits'][-1]['sort'] if resp['hits']['total']['value'] > 0 else []
+    )
+    return {
+        'articles': result,
+        'last_sort': last_sort,
+        'end': len(resp['hits']['hits']) < limit,
+    }
+
+
 def mark_article(Session: sessionmaker[Session], article_ids: list, user_id: str):
     with Session() as session:
         stmt = insert(users_articles).values(
@@ -127,9 +188,30 @@ def delete_mark(Session: sessionmaker[Session], article_ids: list, user_id: str)
         session.commit()
 
 
+def index_article(es: Elasticsearch, article: Article):
+    es.index(
+        index='scivise_articles',
+        document={
+            'id': article.id,
+            'title': article.title,
+            'category': article.category,
+            'annotation': article.annotation,
+            'publication_date': article.publication_date,
+            'keywords': article.keywords,
+            'authors': article.authors,
+            'magazine': article.magazine,
+            'link': article.link,
+        },
+    )
+
+
 def create_article(
-    Session: sessionmaker[Session], article: Article, gen_keywords: bool = True
+    Session: sessionmaker[Session],
+    es: Elasticsearch,
+    article: Article,
+    gen_keywords: bool = True,
 ):
+    article_dc = deepcopy(article)
     with Session() as session:
         authors = []
         for author_name in article.authors:
@@ -178,4 +260,7 @@ def create_article(
         article.keywords = keywords
 
         session.add(article)
+        session.flush()
+        article_dc.id = article.id
         session.commit()
+    index_article(es=es, article=article_dc)

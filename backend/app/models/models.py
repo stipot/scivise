@@ -63,10 +63,10 @@ class Article(Base):
         String(40), CheckConstraint('type in ("news", "article")'), nullable=False
     )
     category: Mapped[str] = mapped_column(String(40), nullable=False)
-    annotation: Mapped[str] = mapped_column(String(1000), init=False, nullable=True)
+    annotation: Mapped[str] = mapped_column(String(1000), nullable=True)
     keywords: Mapped[List[Keyword]] = relationship(secondary=article_keywords)
     publication_date: Mapped[str] = mapped_column(String(10))
-    content: Mapped[str]
+    # content: Mapped[str]
     authors: Mapped[List[Author]] = relationship(secondary=authors_articles)
     magazine: Mapped[str] = mapped_column(String(255), nullable=False)
     link: Mapped[str] = mapped_column(String(255), nullable=False)

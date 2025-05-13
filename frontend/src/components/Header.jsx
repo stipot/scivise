@@ -12,6 +12,7 @@ import {
 	Button,
 } from '@mui/material'
 import MenuIcon from './icons/MenuIcon'
+import SearchIcon from './icons/SearchIcon'
 
 function Header() {
 	const [anchorElNav, setAnchorElNav] = useState(null)
@@ -34,6 +35,20 @@ function Header() {
 							Scivise
 						</Typography>
 					</Link>
+					<Link to={`/search`}>
+						<IconButton>
+							<SearchIcon
+								style={{
+									width: '30px',
+									height: '30px',
+									fill: 'white',
+									strokeWidth: 3,
+									stroke: 'white',
+								}}
+							/>
+						</IconButton>
+					</Link>
+
 					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"

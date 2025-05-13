@@ -11,6 +11,7 @@ import ArticlePage from './pages/ArticlePage'
 import { AppContext } from './context/AppContext'
 import CollectionsPage from './pages/CollectionsPage'
 import API from './api'
+import Search from './pages/Search'
 
 function App() {
 	const [articles, setArticles] = useState([])
@@ -32,6 +33,7 @@ function App() {
 					<Header />
 					<Routes>
 						<Route path="/" element={<General />} />
+						<Route path="/search" element={<Search />} />
 						<Route path="/user/collections" element={<CollectionsPage />} />
 						<Route
 							path="/user/collections/:pageName"

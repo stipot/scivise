@@ -100,7 +100,7 @@ function ArticleCard({ article, move, style, collections }) {
 					))}
 				</div>
 				<Typography className="article_card_info_annonation">
-					{article.type === 'news' ? (
+					{/* {article.type === 'news' ? (
 						<>
 							<strong>Содержание:</strong> {article.content.slice(0, 250)}...
 						</>
@@ -108,7 +108,8 @@ function ArticleCard({ article, move, style, collections }) {
 						<>
 							<strong>Аннотация:</strong> {article.annotation}
 						</>
-					)}
+					)} */}
+					<strong>Аннотация:</strong> {article.annotation}...
 				</Typography>
 			</div>
 
